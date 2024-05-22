@@ -89,7 +89,7 @@ fun WelcomeImg(painter: Painter, contentDesc : String){
 }
 
 @Composable
-fun TextField(label : String, painter : Painter, onTextSelected: (String) -> Unit){
+fun TextField(label : String, painter : Painter, onTextSelected: (String) -> Unit, errorStatus : Boolean = false){
     val textValue = remember {
         mutableStateOf("")
     }
@@ -110,12 +110,13 @@ fun TextField(label : String, painter : Painter, onTextSelected: (String) -> Uni
         },
         leadingIcon = {
             Icon(painter = painter, contentDescription ="" )
-        }
+        },
+        isError = errorStatus
     )
 }
 
 @Composable
-fun PassTextField(label : String, onTextSelected: (String) -> Unit){
+fun PassTextField(label : String, onTextSelected: (String) -> Unit, errorStatus : Boolean = false){
     val password = remember {
         mutableStateOf("")
     }
@@ -155,8 +156,8 @@ fun PassTextField(label : String, onTextSelected: (String) -> Unit){
                 }
             }
         },
-        visualTransformation = if(passVisibility.value) VisualTransformation.None else PasswordVisualTransformation()
-
+        visualTransformation = if(passVisibility.value) VisualTransformation.None else PasswordVisualTransformation(),
+        isError = errorStatus
 
     )
 }
@@ -201,7 +202,7 @@ fun RadioGroup(){
 }
 
 @Composable
-fun ButtonComponent(value: String, onButtonClick : () -> Unit){
+fun ButtonComponent(value: String, onButtonClick : () -> Unit, isEnabled : Boolean = false){
     Button(
         onClick = {
             onButtonClick.invoke()

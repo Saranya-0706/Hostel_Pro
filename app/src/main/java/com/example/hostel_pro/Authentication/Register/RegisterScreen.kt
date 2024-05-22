@@ -56,18 +56,22 @@ fun RegisterScreen(registerViewModel: RegisterViewModel = RegisterViewModel() ){
                 painter = painterResource(id = R.drawable.user),
                 onTextSelected = {
                     registerViewModel.onUIEvent(RegisterUIEvent.userNameEdited(it))
-                }
+                },
+                errorStatus = registerViewModel.regUIState.value.userNameError
             )
             TextField(
                 label = stringResource(id = R.string.email),
                 painter = painterResource(id = R.drawable.email_svgrepo_com),
                 onTextSelected = {
                     registerViewModel.onUIEvent(RegisterUIEvent.emailEdited(it))
-                }
+                },
+                errorStatus = registerViewModel.regUIState.value.emailError
             )
             PassTextField(label = stringResource(id = R.string.pass), onTextSelected = {
                 registerViewModel.onUIEvent(RegisterUIEvent.passwordEdited(it))
-            })
+            },
+                errorStatus = registerViewModel.regUIState.value.passwordError
+            )
 
             Spacer(modifier = Modifier
                 .fillMaxWidth()
@@ -91,7 +95,8 @@ fun RegisterScreen(registerViewModel: RegisterViewModel = RegisterViewModel() ){
 
             ButtonComponent(value = stringResource(id = R.string.register), onButtonClick = {
                 registerViewModel.onUIEvent(RegisterUIEvent.RegisterBtnClick)
-            })
+            }, isEnabled = registerViewModel.allValidationsSuccess.value
+            )
 
             Spacer(modifier = Modifier
                 .fillMaxWidth()

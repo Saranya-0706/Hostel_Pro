@@ -1,4 +1,4 @@
-package com.example.HostEase.Authentication
+package com.example.hostel_pro.Authentication
 
 import android.util.Patterns
 

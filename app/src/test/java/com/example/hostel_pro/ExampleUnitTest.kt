@@ -1,4 +1,4 @@
-package com.example.HostEase
+package com.example.hostel_pro
 
 import org.junit.Test
 

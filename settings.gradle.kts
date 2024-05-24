@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "HostEase"
+rootProject.name = "Hostel_Pro"
 include(":app")
  

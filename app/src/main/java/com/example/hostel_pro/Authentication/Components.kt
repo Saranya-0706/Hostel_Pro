@@ -1,4 +1,4 @@
-package com.example.HostEase.Authentication
+package com.example.hostel_pro.Authentication
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -50,7 +50,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.HostEase.R
+import com.example.hostel_pro.R
 
 
 @Composable
@@ -210,8 +210,7 @@ fun ButtonComponent(value: String, onButtonClick : () -> Unit, isEnabled : Boole
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp),
-        colors = ButtonDefaults.buttonColors(Color.Transparent),
-        enabled = isEnabled
+        colors = ButtonDefaults.buttonColors(Color.Transparent)
     ){
         Box(modifier = Modifier
             .fillMaxWidth()

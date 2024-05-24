@@ -1,4 +1,4 @@
-package com.example.HostEase.Authentication.Register
+package com.example.hostel_pro.Authentication.Register
 
 data class RegisterUIState(
 

@@ -1,4 +1,4 @@
-package com.example.hostel_pro.Authentication.Navigation
+package com.example.HostEase.Authentication.Navigation
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf

@@ -1,4 +1,4 @@
-package com.example.hostel_pro.ui.theme
+package com.example.HostEase.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

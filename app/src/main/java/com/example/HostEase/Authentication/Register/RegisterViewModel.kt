@@ -1,8 +1,8 @@
-package com.example.hostel_pro.Authentication.Register
+package com.example.HostEase.Authentication.Register
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.hostel_pro.Authentication.Validation
+import com.example.HostEase.Authentication.Validation
 
 class RegisterViewModel : ViewModel() {
 

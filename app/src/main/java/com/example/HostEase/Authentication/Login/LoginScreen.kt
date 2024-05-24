@@ -1,4 +1,4 @@
-package com.example.hostel_pro.Authentication.Login
+package com.example.HostEase.Authentication.Login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -18,15 +18,15 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.hostel_pro.Authentication.ButtonComponent
-import com.example.hostel_pro.Authentication.ClickableTextComponent
-import com.example.hostel_pro.Authentication.Navigation.Router
-import com.example.hostel_pro.Authentication.Navigation.Screen
-import com.example.hostel_pro.Authentication.PassTextField
-import com.example.hostel_pro.Authentication.TextBold
-import com.example.hostel_pro.Authentication.TextField
-import com.example.hostel_pro.Authentication.WelcomeImg
-import com.example.hostel_pro.R
+import com.example.HostEase.Authentication.ButtonComponent
+import com.example.HostEase.Authentication.ClickableTextComponent
+import com.example.HostEase.Authentication.Navigation.Router
+import com.example.HostEase.Authentication.Navigation.Screen
+import com.example.HostEase.Authentication.PassTextField
+import com.example.HostEase.Authentication.TextBold
+import com.example.HostEase.Authentication.TextField
+import com.example.HostEase.Authentication.WelcomeImg
+import com.example.HostEase.R
 
 @Composable
 fun LoginScreen(){

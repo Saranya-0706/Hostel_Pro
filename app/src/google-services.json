@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "81004210503",
+    "project_id": "hostease-42c00",
+    "storage_bucket": "hostease-42c00.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81004210503:android:58500549a18de0d7370462",
+        "android_client_info": {
+          "package_name": "com.example.HostEase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApVWf7YXlslxULJB49jvEHJ034RedJiJI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

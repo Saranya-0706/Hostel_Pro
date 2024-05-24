@@ -1,4 +1,4 @@
-package com.example.hostel_pro
+package com.example.HostEase
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

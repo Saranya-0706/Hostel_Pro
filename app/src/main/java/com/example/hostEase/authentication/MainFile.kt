@@ -1,14 +1,14 @@
-package com.example.hostel_pro.Authentication
+package com.example.hostEase.authentication
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.hostel_pro.Authentication.Navigation.Router
-import com.example.hostel_pro.Authentication.Navigation.Screen
-import com.example.hostel_pro.Authentication.Login.LoginScreen
-import com.example.hostel_pro.Authentication.Register.RegisterScreen
+import com.example.hostEase.authentication.Navigation.Router
+import com.example.hostEase.authentication.Navigation.Screen
+import com.example.hostEase.authentication.Login.LoginScreen
+import com.example.hostEase.authentication.Register.RegisterScreen
 
 @Composable
 fun Authentication(){

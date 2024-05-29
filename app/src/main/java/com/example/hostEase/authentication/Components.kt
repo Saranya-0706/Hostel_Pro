@@ -1,4 +1,4 @@
-package com.example.hostel_pro.Authentication
+package com.example.hostEase.authentication
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -48,9 +48,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.hostel_pro.R
+import com.example.hostEase.R
 
 
 @Composable
@@ -163,7 +164,7 @@ fun PassTextField(label : String, onTextSelected: (String) -> Unit, errorStatus 
 }
 
 @Composable
-fun RadioGroup(){
+fun RadioGroup(onRadioBtnSelected : (String) -> Unit, isAdminEnabled :Boolean = false){
     var role by remember {
         mutableStateOf("Student")
     }
@@ -177,6 +178,7 @@ fun RadioGroup(){
                 selected = role == "Student",
                 onClick = {
                     role = "Student"
+                    onRadioBtnSelected(role)
                 })
             Text(text = "Student",style = TextStyle(
                 fontSize = 15.sp
@@ -191,7 +193,9 @@ fun RadioGroup(){
                 selected = role == "Admin",
                 onClick = {
                     role = "Admin"
-                })
+                    onRadioBtnSelected(role)
+                },
+                enabled = isAdminEnabled)
             Text(text = "Admin",style = TextStyle(
                 fontSize = 15.sp
             )
@@ -210,7 +214,11 @@ fun ButtonComponent(value: String, onButtonClick : () -> Unit, isEnabled : Boole
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp),
-        colors = ButtonDefaults.buttonColors(Color.Transparent)
+        colors = ButtonDefaults.buttonColors(
+            Color.Transparent,
+            disabledContainerColor = Color.Transparent
+        ),
+        enabled = isEnabled
     ){
         Box(modifier = Modifier
             .fillMaxWidth()
@@ -250,11 +258,19 @@ fun ClickableTextComponent(loginClick:Boolean = true, onTextSelected: (String) -
 
     ClickableText(
         text = annotatedString,
-        modifier = Modifier.fillMaxWidth().padding(5.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp),
         style = TextStyle(fontSize = 15.sp, textAlign = TextAlign.Center)
     ) {
         onTextSelected(loginRegTxt)
     }
+}
+
+@Preview
+@Composable
+fun Preview(){
+        ButtonComponent(value = "", onButtonClick = { /*TODO*/ })
 }
 
 

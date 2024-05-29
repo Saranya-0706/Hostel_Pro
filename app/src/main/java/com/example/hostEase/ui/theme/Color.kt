@@ -1,4 +1,4 @@
-package com.example.hostel_pro.ui.theme
+package com.example.hostEase.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

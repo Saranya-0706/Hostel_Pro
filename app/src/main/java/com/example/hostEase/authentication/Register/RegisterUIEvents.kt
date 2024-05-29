@@ -1,4 +1,4 @@
-package com.example.hostel_pro.Authentication.Register
+package com.example.hostEase.authentication.Register
 
 sealed class RegisterUIEvent {
 

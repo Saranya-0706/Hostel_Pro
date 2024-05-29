@@ -1,8 +1,10 @@
-package com.example.hostel_pro.Authentication.Register
+package com.example.hostEase.authentication.Register
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.hostel_pro.Authentication.Validation
+import com.example.hostEase.authentication.AdminEmails
+import com.example.hostEase.authentication.Validation
+import com.google.firebase.auth.FirebaseAuth
 
 class RegisterViewModel : ViewModel() {
 
@@ -10,15 +12,17 @@ class RegisterViewModel : ViewModel() {
 
     var allValidationsSuccess = mutableStateOf(false)
 
-    fun onUIEvent(event :RegisterUIEvent){
+    var isAdminEmail = mutableStateOf(false)
+
+    fun onUIEvent(event : RegisterUIEvent){
         when(event){
             is RegisterUIEvent.userNameEdited -> {
                 regUIState.value = regUIState.value.copy(userName = event.userName)
-
             }
 
             is RegisterUIEvent.emailEdited -> {
                 regUIState.value = regUIState.value.copy(email = event.email)
+                isAdminEmail.value = AdminEmails.isAdminEmail(email = event.email)
 
             }
 
@@ -32,7 +36,7 @@ class RegisterViewModel : ViewModel() {
             }
 
             RegisterUIEvent.RegisterBtnClick -> {
-                register()
+                register(email = regUIState.value.email, password = regUIState.value.password)
             }
         }
 
@@ -40,8 +44,16 @@ class RegisterViewModel : ViewModel() {
 
     }
 
-    private fun register() {
+    private fun register(email : String, password : String) {
+        FirebaseAuth
+            .getInstance()
+            .createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener {
 
+            }
+            .addOnFailureListener {
+
+            }
     }
 
     private fun validationWithRules(){

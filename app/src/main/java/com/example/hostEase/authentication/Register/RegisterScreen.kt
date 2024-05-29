@@ -1,4 +1,4 @@
-package com.example.hostel_pro.Authentication.Register
+package com.example.hostEase.authentication.Register
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -18,16 +18,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.hostel_pro.Authentication.ButtonComponent
-import com.example.hostel_pro.Authentication.ClickableTextComponent
-import com.example.hostel_pro.Authentication.Navigation.Router
-import com.example.hostel_pro.Authentication.Navigation.Screen
-import com.example.hostel_pro.Authentication.PassTextField
-import com.example.hostel_pro.Authentication.RadioGroup
-import com.example.hostel_pro.Authentication.TextBold
-import com.example.hostel_pro.Authentication.TextField
-import com.example.hostel_pro.Authentication.WelcomeImg
-import com.example.hostel_pro.R
+import com.example.hostEase.authentication.ButtonComponent
+import com.example.hostEase.authentication.ClickableTextComponent
+import com.example.hostEase.authentication.Navigation.Router
+import com.example.hostEase.authentication.Navigation.Screen
+import com.example.hostEase.authentication.PassTextField
+import com.example.hostEase.authentication.RadioGroup
+import com.example.hostEase.authentication.TextBold
+import com.example.hostEase.authentication.TextField
+import com.example.hostEase.authentication.WelcomeImg
+import com.example.hostEase.R
 
 @Composable
 fun RegisterScreen(registerViewModel: RegisterViewModel = RegisterViewModel() ){
@@ -87,7 +87,10 @@ fun RegisterScreen(registerViewModel: RegisterViewModel = RegisterViewModel() ){
                 )
             )
 
-            RadioGroup()
+            RadioGroup(onRadioBtnSelected = {
+                registerViewModel.onUIEvent(RegisterUIEvent.userRoleEdited(it))
+            },
+                isAdminEnabled = registerViewModel.isAdminEmail.value)
 
             Spacer(modifier = Modifier
                 .fillMaxWidth()

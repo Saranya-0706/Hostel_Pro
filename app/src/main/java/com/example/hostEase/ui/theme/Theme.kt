@@ -1,6 +1,5 @@
-package com.example.hostel_pro.ui.theme
+package com.example.hostEase.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

@@ -1,4 +1,4 @@
-package com.example.hostEase.authentication
+package com.example.hostEase.authentication.AuthValidation
 
 import android.util.Patterns
 

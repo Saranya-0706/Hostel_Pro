@@ -1,4 +1,4 @@
-package com.example.hostEase.authentication.Login
+package com.example.hostEase.authentication.View
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hostEase.authentication.ButtonComponent
 import com.example.hostEase.authentication.ClickableTextComponent
-import com.example.hostEase.authentication.Navigation.Router
-import com.example.hostEase.authentication.Navigation.Screen
+import com.example.hostEase.authentication.AuthNavigation.Router
+import com.example.hostEase.authentication.AuthNavigation.Screen
 import com.example.hostEase.authentication.PassTextField
 import com.example.hostEase.authentication.TextBold
 import com.example.hostEase.authentication.TextField

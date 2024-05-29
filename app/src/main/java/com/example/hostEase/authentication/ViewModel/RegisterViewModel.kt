@@ -1,9 +1,10 @@
-package com.example.hostEase.authentication.Register
+package com.example.hostEase.authentication.ViewModel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.hostEase.authentication.AdminEmails
-import com.example.hostEase.authentication.Validation
+import com.example.hostEase.authentication.AuthValidation.AdminEmails
+import com.example.hostEase.authentication.AuthValidation.Validation
+import com.example.hostEase.authentication.Model.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
 
 class RegisterViewModel : ViewModel() {
@@ -13,6 +14,8 @@ class RegisterViewModel : ViewModel() {
     var allValidationsSuccess = mutableStateOf(false)
 
     var isAdminEmail = mutableStateOf(false)
+
+    var regProgress = mutableStateOf(false)
 
     fun onUIEvent(event : RegisterUIEvent){
         when(event){
@@ -36,24 +39,13 @@ class RegisterViewModel : ViewModel() {
             }
 
             RegisterUIEvent.RegisterBtnClick -> {
-                register(email = regUIState.value.email, password = regUIState.value.password)
+                AuthRepository().register(email = regUIState.value.email, password = regUIState.value.password)
+                regProgress.value = true
             }
         }
 
         validationWithRules()
 
-    }
-
-    private fun register(email : String, password : String) {
-        FirebaseAuth
-            .getInstance()
-            .createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-
-            }
-            .addOnFailureListener {
-
-            }
     }
 
     private fun validationWithRules(){

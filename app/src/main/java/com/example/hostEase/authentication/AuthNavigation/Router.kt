@@ -1,4 +1,4 @@
-package com.example.hostEase.authentication.Navigation
+package com.example.hostEase.authentication.AuthNavigation
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 sealed class Screen{
     object RegisterScreen : Screen()
     object LoginScreen : Screen()
+    object HomeScreen : Screen()
 }
 
 object Router{

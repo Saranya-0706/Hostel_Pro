@@ -5,10 +5,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.hostEase.authentication.Navigation.Router
-import com.example.hostEase.authentication.Navigation.Screen
-import com.example.hostEase.authentication.Login.LoginScreen
-import com.example.hostEase.authentication.Register.RegisterScreen
+import com.example.hostEase.HomeScreen
+import com.example.hostEase.authentication.AuthNavigation.Router
+import com.example.hostEase.authentication.AuthNavigation.Screen
+import com.example.hostEase.authentication.View.LoginScreen
+import com.example.hostEase.authentication.View.RegisterScreen
 
 @Composable
 fun Authentication(){
@@ -20,6 +21,7 @@ fun Authentication(){
             when(currentState.value){
                 Screen.LoginScreen -> LoginScreen()
                 Screen.RegisterScreen -> RegisterScreen()
+                Screen.HomeScreen -> HomeScreen()
             }
 
         }

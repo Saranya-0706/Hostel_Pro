@@ -1,15 +1,18 @@
 package com.example.hostEase.authentication.View
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -27,69 +30,87 @@ import com.example.hostEase.authentication.TextBold
 import com.example.hostEase.authentication.TextField
 import com.example.hostEase.authentication.WelcomeImg
 import com.example.hostEase.R
+import com.example.hostEase.authentication.ViewModel.LoginUIEvent
+import com.example.hostEase.authentication.ViewModel.LoginViewModel
 
 @Composable
-fun LoginScreen(){
+fun LoginScreen(loginViewModel :  LoginViewModel = LoginViewModel()){
 
-    Surface (
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(25.dp)
-    ){
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
 
-        Column (
-            modifier = Modifier.fillMaxSize()
+        Surface (
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(25.dp)
         ){
 
-            WelcomeImg(painter = painterResource(id = R.drawable.iitism), contentDesc = "" )
+            Column (
+                modifier = Modifier.fillMaxSize()
+            ){
 
-            Spacer(modifier = Modifier
-                .fillMaxWidth()
-                .height(25.dp))
+                WelcomeImg(painter = painterResource(id = R.drawable.iitism), contentDesc = "" )
 
-            TextBold(value = stringResource(id = R.string.login))
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(25.dp))
 
-            Spacer(modifier = Modifier
-                .fillMaxWidth()
-                .height(1.dp))
+                TextBold(value = stringResource(id = R.string.login))
 
-            Text(text = "Welcome Back !",modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-                .padding(5.dp),
-                style = TextStyle(fontSize = 18.sp)
-            )
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp))
 
-            Spacer(modifier = Modifier
-                .fillMaxWidth()
-                .height(10.dp))
+                Text(text = "Welcome Back !",modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(5.dp),
+                    style = TextStyle(fontSize = 18.sp)
+                )
 
-            TextField(label = stringResource(id = R.string.email),painter = painterResource(id = R.drawable.email_svgrepo_com), onTextSelected = {
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(10.dp))
 
-            })
-            PassTextField(label = stringResource(id = R.string.pass), onTextSelected = {
+                TextField(label = stringResource(id = R.string.email),
+                    painter = painterResource(id = R.drawable.email_svgrepo_com),
+                    onTextSelected = {
+                        loginViewModel.onEvent(LoginUIEvent.emailEdited(it))
 
-            })
+                    },
+                    errorStatus = loginViewModel.loginUIState.value.emailError)
+                PassTextField(label = stringResource(id = R.string.pass),
+                    onTextSelected = {
+                        loginViewModel.onEvent(LoginUIEvent.passwordEdited(it))
+                    },
+                    errorStatus = loginViewModel.loginUIState.value.passwordError)
 
-            Spacer(modifier = Modifier
-                .fillMaxWidth()
-                .height(180.dp))
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp))
 
-            ButtonComponent(value = stringResource(id = R.string.login), onButtonClick = {
+                ButtonComponent(value = stringResource(id = R.string.login), onButtonClick = {
+                    loginViewModel.onEvent(LoginUIEvent.LoginBtnClick)
+                },
+                    isEnabled = loginViewModel.allValidationsSuccess.value
+                )
 
-            })
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(15.dp))
 
-            Spacer(modifier = Modifier
-                .fillMaxWidth()
-                .height(15.dp))
+                ClickableTextComponent (loginClick = false, onTextSelected = {
 
-            ClickableTextComponent (loginClick = false, onTextSelected = {
+                    Router.navigateTo(Screen.RegisterScreen)
+                })
+            }
+        }
 
-                Router.navigateTo(Screen.RegisterScreen)
-            })
+        if(loginViewModel.loginProgress.value){
+            CircularProgressIndicator()
         }
     }
+
 }
 
 @Preview

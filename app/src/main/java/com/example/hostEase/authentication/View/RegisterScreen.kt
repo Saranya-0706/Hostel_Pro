@@ -122,7 +122,7 @@ fun RegisterScreen(registerViewModel: RegisterViewModel = RegisterViewModel() ){
         }
 
         if(registerViewModel.regProgress.value){
-            CircularProgressIndicator()
+           //CircularProgressIndicator()
         }
     }
 }

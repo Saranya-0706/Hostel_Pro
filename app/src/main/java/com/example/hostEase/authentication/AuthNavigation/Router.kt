@@ -4,9 +4,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 
 sealed class Screen{
-    object RegisterScreen : Screen()
-    object LoginScreen : Screen()
-    object HomeScreen : Screen()
+    data object RegisterScreen : Screen()
+    data object LoginScreen : Screen()
+    data object HomeScreen : Screen()
 }
 
 object Router{

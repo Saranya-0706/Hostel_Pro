@@ -3,7 +3,7 @@ package com.example.hostEase.authentication.ViewModel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.hostEase.authentication.AuthValidation.Validation
-import com.example.hostEase.authentication.Model.AuthRepository
+import com.example.hostEase.authentication.Repository.AuthRepository
 
 class LoginViewModel : ViewModel() {
 

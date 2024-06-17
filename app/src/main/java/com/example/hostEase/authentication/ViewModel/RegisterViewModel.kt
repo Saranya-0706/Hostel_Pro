@@ -4,8 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.hostEase.authentication.AuthValidation.AdminEmails
 import com.example.hostEase.authentication.AuthValidation.Validation
-import com.example.hostEase.authentication.Model.AuthRepository
-import com.google.firebase.auth.FirebaseAuth
+import com.example.hostEase.authentication.Repository.AuthRepository
 
 class RegisterViewModel : ViewModel() {
 
@@ -16,6 +15,8 @@ class RegisterViewModel : ViewModel() {
     var isAdminEmail = mutableStateOf(false)
 
     var regProgress = mutableStateOf(false)
+
+    var regSuccess = mutableStateOf(false)
 
     fun onUIEvent(event : RegisterUIEvent){
         when(event){
@@ -39,7 +40,11 @@ class RegisterViewModel : ViewModel() {
             }
 
             RegisterUIEvent.RegisterBtnClick -> {
-                AuthRepository().register(email = regUIState.value.email, password = regUIState.value.password)
+                AuthRepository().register(
+                    userName = regUIState.value.userName,
+                    userRole = regUIState.value.userRole,
+                    email = regUIState.value.email,
+                    password = regUIState.value.password)
                 regProgress.value = true
             }
         }

@@ -1,13 +1,17 @@
-package com.example.hostEase.authentication.Model
+package com.example.hostEase.authentication.Repository
 
 import com.example.hostEase.authentication.AuthNavigation.Router
 import com.example.hostEase.authentication.AuthNavigation.Screen
 import com.example.hostEase.authentication.ViewModel.LoginViewModel
 import com.example.hostEase.authentication.ViewModel.RegisterViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class AuthRepository() {
-    fun register(email : String, password : String, registerViewModel: RegisterViewModel = RegisterViewModel()) {
+
+    private val database :DatabaseReference = FirebaseDatabase.getInstance().reference
+    fun register(userName : String, userRole : String, email : String, password : String, registerViewModel: RegisterViewModel = RegisterViewModel()) {
 
         FirebaseAuth
             .getInstance()
@@ -15,7 +19,26 @@ class AuthRepository() {
             .addOnCompleteListener {
                 registerViewModel.regProgress.value = false
                 if(it.isSuccessful){
+
+                    val user = FirebaseAuth.getInstance().currentUser
+                    user?.let{
+                        val userId = it.uid
+                        val userMap = mapOf(
+                            "username" to userName,
+                            "email" to email,
+                            "role" to userRole,
+                            "phone" to "",
+                            "hostel" to "",
+                            "profileImgUrl" to ""
+                        )
+
+                        database.child("users").child(userId).setValue(userMap).addOnCompleteListener {
+
+
+                        }
+                    }
                     Router.navigateTo(Screen.HomeScreen)
+
                 }
             }
             .addOnFailureListener {

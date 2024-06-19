@@ -24,12 +24,18 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavGraph
 import com.example.hostEase.Screens.NavDrawerScreens.Settings.ChangePassDialog
+import com.example.hostEase.authentication.AuthNavigation.Router
+import com.example.hostEase.authentication.AuthNavigation.Screen
 import com.example.hostEase.authentication.Repository.AuthRepository
 
 @Composable
 fun Settings() {
     var showChangePassDialog by remember {
+        mutableStateOf(false)
+    }
+    var showDeleteDialog by remember {
         mutableStateOf(false)
     }
     val context = LocalContext.current
@@ -88,9 +94,7 @@ fun Settings() {
 
 
             //Delete account
-            Button(onClick = {
-
-            },
+            Button(onClick = {  showDeleteDialog = true },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp),
@@ -99,15 +103,20 @@ fun Settings() {
                 Text(text = "DELETE ACCOUNT", modifier = Modifier.padding(5.dp))
             }
 
+            if (showDeleteDialog){
+                DeleteAccDialog(onDismiss = { showDeleteDialog = false }, onDelete = {
+                    AuthRepository().deleteAccount(onComplete = { success->
+                        if (success){
+                            Router.navigateTo(Screen.RegisterScreen)
+                            showDeleteDialog = false
+                            Toast.makeText(context,"Account Deleted Successfully ",Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            Toast.makeText(context,"Account Deletion failed",Toast.LENGTH_SHORT).show()
+                        }
+                    })
+                })
+            }
         }
-
-    }
-}
-
-@Preview
-@Composable
-fun sett(){
-    ChangePassDialog(onDismiss = { /*TODO*/ }) {
-        
     }
 }

@@ -87,4 +87,17 @@ class AuthRepository() {
             }
     }
 
+    fun deleteAccount( onComplete : (Boolean) -> Unit){
+        FirebaseAuth.getInstance()
+            .currentUser?.let {user->
+                user.delete()
+                    .addOnCompleteListener {task->
+                        if(task.isSuccessful)
+                            onComplete(true)
+                        else
+                            onComplete(false)
+                    }
+            }
+    }
+
 }

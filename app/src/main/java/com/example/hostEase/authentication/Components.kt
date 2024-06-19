@@ -2,6 +2,7 @@ package com.example.hostEase.authentication
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
@@ -122,6 +124,7 @@ fun PassTextField(label : String, onTextSelected: (String) -> Unit, errorStatus 
         mutableStateOf("")
     }
 
+    val scrollState = rememberScrollState()
     val passVisibility = remember {
         mutableStateOf(false)
     }
@@ -129,7 +132,11 @@ fun PassTextField(label : String, onTextSelected: (String) -> Unit, errorStatus 
     val localFocusManager = LocalFocusManager.current
 
     OutlinedTextField(
-        label = { Text(text = label, textAlign = TextAlign.Center) },
+        label = { Box(modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(scrollState)){
+            Text(text = label, textAlign = TextAlign.Center, maxLines = 1)
+        } },
         modifier = Modifier
             .fillMaxWidth()
             .height(70.dp)

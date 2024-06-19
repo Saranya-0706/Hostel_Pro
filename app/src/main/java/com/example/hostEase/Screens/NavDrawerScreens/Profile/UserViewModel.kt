@@ -1,4 +1,4 @@
-package com.example.hostEase
+package com.example.hostEase.Screens.NavDrawerScreens.Profile
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
@@ -72,5 +72,6 @@ class UserViewModel : ViewModel() {
             else
                 onComplete(null.toString())
         }
+        loadUserProfile()
     }
 }

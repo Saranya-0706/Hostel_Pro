@@ -9,7 +9,7 @@ class HomeViewModel : ViewModel() {
 
     val navDrawerItems = listOf(
         NavDrawerItems.Profile,
-        NavDrawerItems.a,
+        NavDrawerItems.Settings,
         NavDrawerItems.b,
         NavDrawerItems.c
     )

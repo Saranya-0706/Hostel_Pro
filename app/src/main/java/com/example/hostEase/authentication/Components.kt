@@ -166,7 +166,7 @@ fun PassTextField(label : String, onTextSelected: (String) -> Unit, errorStatus 
 @Composable
 fun RadioGroup(onRadioBtnSelected : (String) -> Unit, isAdminEnabled :Boolean = false){
     var role by remember {
-        mutableStateOf("Student")
+        mutableStateOf("")
     }
 
     Row (modifier = Modifier

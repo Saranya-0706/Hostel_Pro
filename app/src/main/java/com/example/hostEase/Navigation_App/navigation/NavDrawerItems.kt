@@ -8,7 +8,7 @@ sealed class NavDrawerItems(
     val name:String
 ){
     data object Profile : NavDrawerItems("profile", R.drawable.announce,"Profile")
-    data object a: NavDrawerItems("a", R.drawable.complaint,"a")
+    data object Settings: NavDrawerItems("Settings", R.drawable.complaint,"Settings")
     data object b : NavDrawerItems("b", R.drawable.lost_found,"b")
     data object c : NavDrawerItems("c", R.drawable.chat,"c")
 }

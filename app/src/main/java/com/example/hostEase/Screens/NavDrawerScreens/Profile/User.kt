@@ -1,4 +1,4 @@
-package com.example.hostEase
+package com.example.hostEase.Screens.NavDrawerScreens.Profile
 
 data class User(
     val username : String = "",

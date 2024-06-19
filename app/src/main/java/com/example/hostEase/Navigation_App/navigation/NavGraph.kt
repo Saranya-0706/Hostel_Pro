@@ -9,11 +9,11 @@ import com.example.hostEase.Screens.BottomNavScreens.ChatScreen
 import com.example.hostEase.Screens.BottomNavScreens.ComplaintScreen
 import com.example.hostEase.Screens.BottomNavScreens.GeneralScreen
 import com.example.hostEase.Screens.BottomNavScreens.LostFoundScreen
-import com.example.hostEase.Screens.NavDrawerScreens.ProfileScreen
-import com.example.hostEase.Screens.NavDrawerScreens.a
+import com.example.hostEase.Screens.NavDrawerScreens.Profile.ProfileScreen
 import com.example.hostEase.Screens.NavDrawerScreens.b
 import com.example.hostEase.Screens.NavDrawerScreens.c
-import com.example.hostEase.UserViewModel
+import com.example.hostEase.Screens.NavDrawerScreens.Profile.UserViewModel
+import com.example.hostEase.Screens.NavDrawerScreens.Settings.Settings
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -25,7 +25,7 @@ fun NavGraph(navController: NavHostController, userViewModel: UserViewModel = vi
         composable(BottomNavItems.LostFound.route){ LostFoundScreen() }
         composable(BottomNavItems.Chat.route){ ChatScreen() }
         composable(NavDrawerItems.Profile.route){ ProfileScreen(userViewModel, FirebaseAuth.getInstance().currentUser!!.uid) }
-        composable(NavDrawerItems.a.route){ a() }
+        composable(NavDrawerItems.Settings.route){ Settings() }
         composable(NavDrawerItems.b.route){ b() }
         composable(NavDrawerItems.c.route){ c() }
 

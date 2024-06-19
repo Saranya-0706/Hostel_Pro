@@ -29,13 +29,6 @@ fun GeneralScreen() {
         Box(modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center) {
             Text(text = "General Screen", style = TextStyle(fontSize = 25.sp))
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
-                Button(onClick = {
-                    AuthRepository().logout()
-                }) {
-                    Text(text = "LOG OUT")
-                }
-            }
         }
     }
 }

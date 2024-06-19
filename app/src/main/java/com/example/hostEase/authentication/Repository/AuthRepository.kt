@@ -4,7 +4,9 @@ import com.example.hostEase.authentication.AuthNavigation.Router
 import com.example.hostEase.authentication.AuthNavigation.Screen
 import com.example.hostEase.authentication.ViewModel.LoginViewModel
 import com.example.hostEase.authentication.ViewModel.RegisterViewModel
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
@@ -34,7 +36,6 @@ class AuthRepository() {
 
                         database.child("users").child(userId).setValue(userMap).addOnCompleteListener {
 
-
                         }
                     }
                     Router.navigateTo(Screen.HomeScreen)
@@ -51,6 +52,8 @@ class AuthRepository() {
         FirebaseAuth
             .getInstance()
             .signOut()
+
+        Router.navigateTo(Screen.LoginScreen)
     }
 
     fun login(email: String,password: String, loginViewModel: LoginViewModel = LoginViewModel()){
@@ -67,6 +70,20 @@ class AuthRepository() {
             }
             .addOnFailureListener {
 
+            }
+    }
+
+    fun changePass(newPass :String, onComplete : (Boolean) -> Unit){
+
+        FirebaseAuth.getInstance()
+            .currentUser?.let {user ->
+                user.updatePassword(newPass)
+                    .addOnCompleteListener {task->
+                        if(task.isSuccessful)
+                            onComplete(true)
+                        else
+                            onComplete(false)
+                    }
             }
     }
 

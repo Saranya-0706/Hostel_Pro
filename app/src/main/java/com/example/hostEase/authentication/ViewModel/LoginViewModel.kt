@@ -32,7 +32,6 @@ class LoginViewModel : ViewModel() {
         }
         validateLoginWithRules()
     }
-
     private fun validateLoginWithRules(){
         val emailResult = Validation.validateEmail(
             email = loginUIState.value.email

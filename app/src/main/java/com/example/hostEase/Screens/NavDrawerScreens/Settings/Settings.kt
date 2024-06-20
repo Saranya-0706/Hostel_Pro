@@ -38,6 +38,10 @@ fun Settings() {
     var showDeleteDialog by remember {
         mutableStateOf(false)
     }
+    var showForgotPassDialog by remember {
+        mutableStateOf(false)
+    }
+
     val context = LocalContext.current
 
     Surface(
@@ -57,6 +61,7 @@ fun Settings() {
                     modifier = Modifier.padding(top = 30.dp, bottom = 40.dp))
             }
 
+            //LogOut
             Button(onClick = {
                 AuthRepository().logout()
             },
@@ -89,7 +94,19 @@ fun Settings() {
                         else
                             Toast.makeText(context,"Password Changed Failed! Try Again",Toast.LENGTH_SHORT).show()
                     }
+                }, showForgotPass = {
+                    showChangePassDialog = false
+                    showForgotPassDialog = true
                 })
+            }
+
+            if (showForgotPassDialog){
+                ForgotPassDialog(onDismiss = {
+                    showChangePassDialog = true
+                    showForgotPassDialog = false}) {
+                    showForgotPassDialog = false
+                    Toast.makeText(context,"Password Reset email sent Successfully!",Toast.LENGTH_SHORT).show()
+                }
             }
 
 

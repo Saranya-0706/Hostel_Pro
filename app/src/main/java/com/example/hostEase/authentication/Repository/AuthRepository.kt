@@ -100,4 +100,16 @@ class AuthRepository() {
             }
     }
 
+    fun forgotPassword(email: String, onComplete: (Boolean, String?) -> Unit){
+
+        FirebaseAuth.getInstance()
+            .sendPasswordResetEmail(email)
+            .addOnCompleteListener { task->
+                if (task.isSuccessful)
+                    onComplete(true,null)
+                else
+                    onComplete(false,task.exception?.message)
+            }
+    }
+
 }

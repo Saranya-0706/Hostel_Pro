@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -36,6 +37,8 @@ import com.example.hostEase.authentication.ViewModel.RegisterViewModel
 
 @Composable
 fun RegisterScreen(registerViewModel: RegisterViewModel = RegisterViewModel() ){
+
+    val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
 
@@ -105,7 +108,7 @@ fun RegisterScreen(registerViewModel: RegisterViewModel = RegisterViewModel() ){
                     .height(50.dp))
 
                 ButtonComponent(value = stringResource(id = R.string.register), onButtonClick = {
-                    registerViewModel.onUIEvent(RegisterUIEvent.RegisterBtnClick)
+                    registerViewModel.onUIEvent(RegisterUIEvent.RegisterBtnClick(context))
                 }, isEnabled = registerViewModel.allValidationsSuccess.value
                 )
 

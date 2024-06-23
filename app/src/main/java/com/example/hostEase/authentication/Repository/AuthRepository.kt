@@ -13,15 +13,17 @@ import com.google.firebase.database.FirebaseDatabase
 class AuthRepository() {
 
     private val database :DatabaseReference = FirebaseDatabase.getInstance().reference
-    fun register(userName : String, userRole : String, email : String, password : String, registerViewModel: RegisterViewModel = RegisterViewModel()) {
+    fun register(userName : String, userRole : String, email : String, password : String,
+                 registerViewModel: RegisterViewModel = RegisterViewModel(),
+                 onComplete: (Boolean, String?) -> Unit) {
 
         FirebaseAuth
             .getInstance()
             .createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
+            .addOnCompleteListener {task->
                 registerViewModel.regProgress.value = false
-                if(it.isSuccessful){
-
+                if(task.isSuccessful){
+                    onComplete(true,null)
                     val user = FirebaseAuth.getInstance().currentUser
                     user?.let{
                         val userId = it.uid
@@ -41,6 +43,8 @@ class AuthRepository() {
                     Router.navigateTo(Screen.HomeScreen)
 
                 }
+                else
+                    onComplete(false, task.exception?.message)
             }
             .addOnFailureListener {
 
@@ -56,16 +60,22 @@ class AuthRepository() {
         Router.navigateTo(Screen.LoginScreen)
     }
 
-    fun login(email: String,password: String, loginViewModel: LoginViewModel = LoginViewModel()){
+    fun login(email: String,password: String,
+              loginViewModel: LoginViewModel = LoginViewModel(),
+              onComplete: (Boolean, String?) -> Unit){
 
         FirebaseAuth
             .getInstance()
             .signInWithEmailAndPassword(email,password)
-            .addOnCompleteListener {
+            .addOnCompleteListener {task->
 
                 loginViewModel.loginProgress.value = false
-                if(it.isSuccessful){
+                if(task.isSuccessful){
+                    onComplete(true,null)
                     Router.navigateTo(Screen.HomeScreen)
+                }
+                else{
+                    onComplete(false, task.exception?.message)
                 }
             }
             .addOnFailureListener {

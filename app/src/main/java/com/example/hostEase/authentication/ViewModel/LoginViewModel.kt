@@ -1,5 +1,6 @@
 package com.example.hostEase.authentication.ViewModel
 
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.hostEase.authentication.AuthValidation.Validation
@@ -21,14 +22,24 @@ class LoginViewModel : ViewModel() {
             is LoginUIEvent.passwordEdited -> {
                 loginUIState.value = loginUIState.value.copy(password = event.pass)
             }
-            LoginUIEvent.LoginBtnClick -> {
+
+            is LoginUIEvent.LoginBtnClick -> {
                 AuthRepository().login(
                     email = loginUIState.value.email,
-                    password = loginUIState.value.password
+                    password = loginUIState.value.password,
+                    onComplete = {success, error->
+                        if(success)
+                            Toast.makeText(event.context,"Login Successful",Toast.LENGTH_SHORT).show()
+                        else{
+                            if (error?.isNotEmpty() == true)
+                                Toast.makeText(event.context,error,Toast.LENGTH_SHORT).show()
+                            else
+                                Toast.makeText(event.context,"Login Failed!",Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 )
                 loginProgress.value = true
             }
-
         }
         validateLoginWithRules()
     }

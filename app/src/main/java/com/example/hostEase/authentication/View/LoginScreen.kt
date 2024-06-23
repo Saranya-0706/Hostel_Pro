@@ -131,10 +131,10 @@ fun LoginScreen(loginViewModel :  LoginViewModel = LoginViewModel()){
 
                 Spacer(modifier = Modifier
                     .fillMaxWidth()
-                    .height(180.dp))
+                    .height(150.dp))
 
                 ButtonComponent(value = stringResource(id = R.string.login), onButtonClick = {
-                    loginViewModel.onEvent(LoginUIEvent.LoginBtnClick)
+                    loginViewModel.onEvent(LoginUIEvent.LoginBtnClick(context))
                 },
                     isEnabled = loginViewModel.allValidationsSuccess.value
                 )

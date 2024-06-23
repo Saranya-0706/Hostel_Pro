@@ -1,10 +1,14 @@
 package com.example.hostEase.authentication.ViewModel
 
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCompositionContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import com.example.hostEase.authentication.AuthValidation.AdminEmails
 import com.example.hostEase.authentication.AuthValidation.Validation
 import com.example.hostEase.authentication.Repository.AuthRepository
+import kotlin.coroutines.coroutineContext
 
 class RegisterViewModel : ViewModel() {
 
@@ -15,8 +19,6 @@ class RegisterViewModel : ViewModel() {
     var isAdminEmail = mutableStateOf(false)
 
     var regProgress = mutableStateOf(false)
-
-    var regSuccess = mutableStateOf(false)
 
     fun onUIEvent(event : RegisterUIEvent){
         when(event){
@@ -39,12 +41,23 @@ class RegisterViewModel : ViewModel() {
                 regUIState.value = regUIState.value.copy(userRole = event.role)
             }
 
-            RegisterUIEvent.RegisterBtnClick -> {
+            is RegisterUIEvent.RegisterBtnClick -> {
                 AuthRepository().register(
                     userName = regUIState.value.userName,
                     userRole = regUIState.value.userRole,
                     email = regUIState.value.email,
-                    password = regUIState.value.password)
+                    password = regUIState.value.password,
+                    onComplete = {success, error->
+                        if(success)
+                            Toast.makeText(event.context,"Registration Successful", Toast.LENGTH_SHORT).show()
+                        else{
+                            if (error?.isNotEmpty() == true)
+                                Toast.makeText(event.context, error, Toast.LENGTH_SHORT).show()
+                            else
+                                Toast.makeText(event.context,"Registration Failed!", Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
                 regProgress.value = true
             }
         }

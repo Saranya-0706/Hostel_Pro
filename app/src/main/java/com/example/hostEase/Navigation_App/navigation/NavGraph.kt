@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.hostEase.Screens.BottomNavScreens.ChatScreen
-import com.example.hostEase.Screens.BottomNavScreens.ComplaintScreen
+import com.example.hostEase.Screens.BottomNavScreens.Complaints.ComplaintScreen
 import com.example.hostEase.Screens.BottomNavScreens.Announcements.GeneralScreen
 import com.example.hostEase.Screens.BottomNavScreens.LostFoundScreen
 import com.example.hostEase.Screens.NavDrawerScreens.Profile.ProfileScreen

@@ -7,12 +7,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.hostEase.Navigation_App.navigation.BottomNavItems
@@ -40,7 +43,13 @@ fun NavDrawer(navController: NavController, drawerState: DrawerState, scope : Co
         items.forEach{navItem ->
 
             NavigationDrawerItem(
-                label = { Text(text = navItem.name)},
+                label = { Text(text = "  " + navItem.name, fontSize = 18.sp)},
+                icon = {
+                    Icon(
+                        painter = painterResource(id = navItem.icon),
+                        contentDescription = navItem.name
+                    )
+                },
                 selected = navItem.route == currentRouteAsState,
                 onClick = {
                     scope.launch {

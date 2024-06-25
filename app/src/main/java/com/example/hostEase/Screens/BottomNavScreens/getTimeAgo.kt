@@ -1,4 +1,4 @@
-package com.example.hostEase.Screens.BottomNavScreens.Announcements
+package com.example.hostEase.Screens.BottomNavScreens
 
 import java.util.concurrent.TimeUnit
 

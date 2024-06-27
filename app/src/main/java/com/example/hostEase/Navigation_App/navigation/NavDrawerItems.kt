@@ -9,6 +9,6 @@ sealed class NavDrawerItems(
 ){
     data object Profile : NavDrawerItems("profile", R.drawable.profile_user,"Profile")
     data object Settings: NavDrawerItems("Settings", R.drawable.settings,"Settings")
-    data object b : NavDrawerItems("b", R.drawable.complaint,"b")
+    data object PrivateComplaints : NavDrawerItems("PrivateComplaints", R.drawable.complaint,"Private Complaints")
     data object c : NavDrawerItems("c", R.drawable.chat,"c")
 }

@@ -1,6 +1,7 @@
 package com.example.hostEase.Screens.BottomNavScreens.Complaints
 
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,12 +17,19 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -33,6 +41,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
@@ -143,22 +153,28 @@ fun ComplaintsItem(complaint: Complaint,viewModel: ComplaintViewModel,
 
             Row (verticalAlignment = Alignment.CenterVertically){
 
-                IconButton(onClick = { onUpvote(complaint.id) }) {
-                    Icon(painter = painterResource(id = R.drawable.vote_up), contentDescription ="Upvote",
-                        tint = if (complaint.voters[currentUser?.uid] == true) colorPrim else Color.White
-                    )
-                }
-                Text(text = complaint.upVotes.toString())
+                if (complaint.type == "Public") {
+                    IconButton(onClick = { onUpvote(complaint.id) }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.vote_up),
+                            contentDescription = "Upvote",
+                            tint = if (complaint.voters[currentUser?.uid] == true) colorPrim else Color.White
+                        )
+                    }
+                    Text(text = complaint.upVotes.toString())
 
-                Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(16.dp))
 
-                IconButton(onClick = { onDownvote(complaint.id) }) {
-                    Icon(painter = painterResource(id = R.drawable.vote_up), contentDescription ="DownVote",
-                        modifier = Modifier.graphicsLayer(rotationZ = 180f),
-                        tint = if (complaint.voters[currentUser?.uid] == false) colorPrim else Color.White
-                    )
+                    IconButton(onClick = { onDownvote(complaint.id) }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.vote_up),
+                            contentDescription = "DownVote",
+                            modifier = Modifier.graphicsLayer(rotationZ = 180f),
+                            tint = if (complaint.voters[currentUser?.uid] == false) colorPrim else Color.White
+                        )
+                    }
+                    Text(text = complaint.downVotes.toString())
                 }
-                Text(text = complaint.downVotes.toString())
 
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd){
                     Text(text = getTimeAgo(complaint.timeStamp,currentTime), style = TextStyle(
@@ -172,12 +188,15 @@ fun ComplaintsItem(complaint: Complaint,viewModel: ComplaintViewModel,
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddComplaintDialog(viewModel: ComplaintViewModel,onDismiss : () -> Unit, onComplete : () -> Unit){
     var heading by remember{ mutableStateOf("") }
     var content by remember{ mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+    var type by remember { mutableStateOf("") }
+    var showTypeWarning by remember { mutableStateOf(false) }
 
-    val auth = FirebaseAuth.getInstance()
     val scrollState = rememberScrollState()
     val context = LocalContext.current
 
@@ -186,8 +205,71 @@ fun AddComplaintDialog(viewModel: ComplaintViewModel,onDismiss : () -> Unit, onC
         text = {
             Column (Modifier.verticalScroll(scrollState)){
 
-                OutlinedTextField(value = heading, onValueChange = { heading = it}, label = { Text(text = "Heading")})
-                OutlinedTextField(value = content, onValueChange = { content = it}, label = { Text(text = "Content")})
+                if (showTypeWarning){
+                    Spacer(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(3.dp))
+                    if (type == "Public") {
+                        Text(
+                            text = "Public Complaints should be of Common concern and can be viewed by Everyone",
+                            color = Color.Red
+                        )
+                    }
+                    else if (type == "Private") {
+                        Text(
+                            text = "Private Complaints should be of Personal concern and can be viewed by only by Admin",
+                            color = Color.Red
+                        )
+                    }else{
+                        Text(
+                            text = "Select Complaint Type",
+                            color = Color.Red
+                        )
+                    }
+
+                    Spacer(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp))
+                }
+               Box(modifier = Modifier.fillMaxWidth(),
+                   contentAlignment = Alignment.Center) {
+                   ExposedDropdownMenuBox(
+                       expanded = expanded,
+                       onExpandedChange = { expanded = it }) {
+                       OutlinedTextField(value = type, onValueChange = {}, readOnly = true,
+                           label = { Text(text = "Select Complaint Type") },
+                           trailingIcon = {
+                               ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                           },
+                           modifier = Modifier
+                               .fillMaxWidth()
+                               .menuAnchor()
+                       )
+                       ExposedDropdownMenu(
+                           expanded = expanded,
+                           onDismissRequest = { expanded = false }) {
+                           DropdownMenuItem(text = { Text(text = "Public") }, onClick = {
+                               type = "Public"
+                               showTypeWarning = true
+                               expanded = false
+                           })
+                           DropdownMenuItem(text = { Text(text = "Private") }, onClick = {
+                               type = "Private"
+                               showTypeWarning = true
+                               expanded = false
+                           })
+                       }
+                   }
+                   }
+
+                   OutlinedTextField(
+                       value = heading,
+                       onValueChange = { heading = it },
+                       label = { Text(text = "Heading") })
+                   OutlinedTextField(
+                       value = content,
+                       onValueChange = { content = it },
+                       label = { Text(text = "Content") })
 
             }
         },
@@ -198,19 +280,30 @@ fun AddComplaintDialog(viewModel: ComplaintViewModel,onDismiss : () -> Unit, onC
         },
         confirmButton = {
             Button(onClick = {
-                viewModel.addComplaint(
-                    Complaint(
-                        heading = heading,
-                        content = content
-                    ), onComplete = { success->
-                        if (success){
-                            onComplete()
-                            Toast.makeText(context,"Complaint Added Successfully",Toast.LENGTH_SHORT).show()
+                if (type.isNotEmpty()) {
+                    viewModel.addComplaint(
+                        Complaint(
+                            heading = heading,
+                            content = content,
+                            type = type
+                        ), onComplete = { success ->
+                            if (success) {
+                                onComplete()
+                                Toast.makeText(
+                                    context,
+                                    "Complaint Added Successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else
+                                Toast.makeText(
+                                    context,
+                                    "Failed to Add Complaint! Please Try Again",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                         }
-                        else
-                            Toast.makeText(context,"Failed to Add Complaint! Please Try Again",Toast.LENGTH_SHORT).show()
-                    }
-                )
+                    )
+                }else
+                    showTypeWarning = true
             }) {
                 Text(text = "Add")
             }

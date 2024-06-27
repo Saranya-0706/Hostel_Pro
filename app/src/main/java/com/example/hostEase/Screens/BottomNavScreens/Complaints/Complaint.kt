@@ -1,6 +1,7 @@
 package com.example.hostEase.Screens.BottomNavScreens.Complaints
 
 data class Complaint(
+    val type : String = "",
     val id:String = "",
     val heading : String = "",
     val content : String = "",

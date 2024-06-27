@@ -1,4 +1,4 @@
-package com.example.hostEase.Screens.BottomNavScreens.Complaints
+package com.example.hostEase.Screens.NavDrawerScreens.PrivateComplaints
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -33,14 +33,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.hostEase.Screens.BottomNavScreens.Announcements.AddAnnouncementDialog
-import com.example.hostEase.Screens.BottomNavScreens.Announcements.AnnouncementItem
+import com.example.hostEase.Screens.BottomNavScreens.Complaints.AddComplaintDialog
+import com.example.hostEase.Screens.BottomNavScreens.Complaints.ComplaintViewModel
+import com.example.hostEase.Screens.BottomNavScreens.Complaints.ComplaintsItem
 import com.example.hostEase.Screens.NavDrawerScreens.Profile.UserViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun ComplaintScreen( complaintViewModel: ComplaintViewModel = viewModel(), userViewModel: UserViewModel = viewModel()) {
-
+fun PrivateComplaints(complaintViewModel: ComplaintViewModel = viewModel(), userViewModel: UserViewModel = viewModel()) {
     val user by userViewModel.user.observeAsState()
     val complaints by complaintViewModel.complaints.collectAsStateWithLifecycle()
     val currentUser by complaintViewModel.currentUser.collectAsStateWithLifecycle()
@@ -88,22 +88,24 @@ fun ComplaintScreen( complaintViewModel: ComplaintViewModel = viewModel(), userV
             .padding(start = 12.dp, end = 12.dp, bottom = 5.dp)
             .verticalScroll(scrollState)){
             complaints.forEach {complaint ->
-                if (complaint.type == "Public") {
-                    ComplaintsItem(
-                        complaint = complaint,
-                        viewModel = complaintViewModel,
-                        userRole = userRole,
-                        currentTime = currentTime,
-                        canDelete = currentUser?.uid == complaint.userId,
-                        onUpvote = { complaintViewModel.upVoteComplaint(complaint.id) },
-                        onDownvote = { complaintViewModel.downVoteComplaint(complaint.id) },
-                        currentUser = currentUser
-                    )
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(10.dp)
-                    )
+                if (complaint.type == "Private") {
+                    if (currentUser?.uid == complaint.userId || userRole == "Admin") {
+                        ComplaintsItem(
+                            complaint = complaint,
+                            viewModel = complaintViewModel,
+                            userRole = userRole,
+                            currentTime = currentTime,
+                            canDelete = currentUser?.uid == complaint.userId,
+                            onUpvote = { complaintViewModel.upVoteComplaint(complaint.id) },
+                            onDownvote = { complaintViewModel.downVoteComplaint(complaint.id) },
+                            currentUser = currentUser
+                        )
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(10.dp)
+                        )
+                    }
                 }
             }
         }

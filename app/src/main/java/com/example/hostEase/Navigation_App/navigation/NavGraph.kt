@@ -10,7 +10,7 @@ import com.example.hostEase.Screens.BottomNavScreens.Complaints.ComplaintScreen
 import com.example.hostEase.Screens.BottomNavScreens.Announcements.GeneralScreen
 import com.example.hostEase.Screens.BottomNavScreens.LostFoundScreen
 import com.example.hostEase.Screens.NavDrawerScreens.Profile.ProfileScreen
-import com.example.hostEase.Screens.NavDrawerScreens.b
+import com.example.hostEase.Screens.NavDrawerScreens.PrivateComplaints.PrivateComplaints
 import com.example.hostEase.Screens.NavDrawerScreens.c
 import com.example.hostEase.Screens.NavDrawerScreens.Profile.UserViewModel
 import com.example.hostEase.Screens.NavDrawerScreens.Settings.Settings
@@ -26,7 +26,7 @@ fun NavGraph(navController: NavHostController, userViewModel: UserViewModel = vi
         composable(BottomNavItems.Chat.route){ ChatScreen() }
         composable(NavDrawerItems.Profile.route){ ProfileScreen(userViewModel, FirebaseAuth.getInstance().currentUser!!.uid) }
         composable(NavDrawerItems.Settings.route){ Settings() }
-        composable(NavDrawerItems.b.route){ b() }
+        composable(NavDrawerItems.PrivateComplaints.route){ PrivateComplaints() }
         composable(NavDrawerItems.c.route){ c() }
 
     }

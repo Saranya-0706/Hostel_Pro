@@ -82,7 +82,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.2")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.8")
     implementation("com.github.dhaval2404:imagepicker:2.1")
+
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
-
+    implementation("com.github.skydoves:landscapist-glide:2.3.5")
 }

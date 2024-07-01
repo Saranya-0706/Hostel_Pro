@@ -36,7 +36,7 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun updateUserProfile(userId: String, phone : String, userName : String, hostel : String, profileImgUri : String, onComplete : (Boolean) -> Unit) {
+    fun updateUserProfile(userId: String, phone: String, userName: String, hostel: String, profileImgUri: String, onComplete: (Boolean) -> Unit) {
         viewModelScope.launch {
 
             val updatedUser = _user.value?.copy(
@@ -56,22 +56,18 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun uploadProfileImage(userId : String, uri : Uri, onComplete: (String) -> Unit){
+    fun uploadProfileImage(userId : String, uri : Uri, onSuccess: (String) -> Unit,onFailure :(Exception)-> Unit ){
 
         val imgRef = storageRef.child("Profile Images").child(userId)
 
-        imgRef.putFile(uri).continueWithTask { task ->
-            if (!task.isSuccessful){
-                task.exception?.let { throw it }
+        imgRef.putFile(uri).addOnSuccessListener {
+            imgRef.downloadUrl.addOnSuccessListener { uri->
+                onSuccess(uri.toString())
+            }.addOnFailureListener {
+                onFailure(it)
             }
-
-            imgRef.downloadUrl
-        }.addOnCompleteListener {
-            if (it.isSuccessful)
-                onComplete(it.result.toString())
-            else
-                onComplete(null.toString())
         }
+
         loadUserProfile()
     }
 }

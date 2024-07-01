@@ -92,7 +92,7 @@ fun WelcomeImg(painter: Painter, contentDesc : String){
 }
 
 @Composable
-fun TextField(label : String, painter : Painter, onTextSelected: (String) -> Unit, errorStatus : Boolean = false){
+fun TextField(label: String, painter: Painter?, onTextSelected: (String) -> Unit, errorStatus: Boolean = false){
     val textValue = remember {
         mutableStateOf("")
     }
@@ -112,7 +112,7 @@ fun TextField(label : String, painter : Painter, onTextSelected: (String) -> Uni
             onTextSelected(it)
         },
         leadingIcon = {
-            Icon(painter = painter, contentDescription ="" )
+            painter?.let { Icon(painter = it, contentDescription ="" ) }
         },
         isError = errorStatus
     )

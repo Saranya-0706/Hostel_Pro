@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,11 +24,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,7 +41,6 @@ import com.example.hostEase.authentication.TextField
 import com.example.hostEase.authentication.WelcomeImg
 import com.example.hostEase.R
 import com.example.hostEase.Screens.NavDrawerScreens.Settings.ForgotPassDialog
-import com.example.hostEase.authentication.Repository.AuthRepository
 import com.example.hostEase.authentication.ViewModel.LoginUIEvent
 import com.example.hostEase.authentication.ViewModel.LoginViewModel
 
@@ -92,7 +88,8 @@ fun LoginScreen(loginViewModel :  LoginViewModel = LoginViewModel()){
                     .fillMaxWidth()
                     .height(10.dp))
 
-                TextField(label = stringResource(id = R.string.email),
+                TextField(
+                    label = stringResource(id = R.string.email),
                     painter = painterResource(id = R.drawable.email_svgrepo_com),
                     onTextSelected = {
                         loginViewModel.onEvent(LoginUIEvent.emailEdited(it))

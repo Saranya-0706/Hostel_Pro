@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.hostEase.Screens.BottomNavScreens.Announcements.GeneralScreen
-import com.example.hostEase.Screens.BottomNavScreens.ChatScreen
+import com.example.hostEase.Screens.BottomNavScreens.ChatSection.ChatSwitcher
 import com.example.hostEase.Screens.BottomNavScreens.Complaints.ComplaintScreen
 import com.example.hostEase.Screens.BottomNavScreens.LostOrFound.LostFoundNavGraph
 import com.example.hostEase.Screens.NavDrawerScreens.PrivateComplaints.PrivateComplaints
@@ -23,7 +23,7 @@ fun NavGraph(navController: NavHostController, userViewModel: UserViewModel = vi
         composable(BottomNavItems.General.route){ GeneralScreen() }
         composable(BottomNavItems.Complaints.route){ ComplaintScreen() }
         composable(BottomNavItems.LostFound.route){ LostFoundNavGraph() }
-        composable(BottomNavItems.Chat.route){ ChatScreen() }
+        composable(BottomNavItems.Chat.route){ ChatSwitcher() }
         composable(NavDrawerItems.Profile.route){ ProfileScreen(userViewModel, FirebaseAuth.getInstance().currentUser!!.uid) }
         composable(NavDrawerItems.Settings.route){ Settings() }
         composable(NavDrawerItems.PrivateComplaints.route){ PrivateComplaints() }

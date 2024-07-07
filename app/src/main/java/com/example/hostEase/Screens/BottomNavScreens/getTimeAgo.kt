@@ -14,7 +14,7 @@ fun getTimeAgo(timeStamp : Long,currentTime : Long): String{
     return when{
         days > 0 -> if(days == 1L)  "$days day ago" else "$days days ago"
         hours > 0 -> if(hours == 1L)  "$hours hour ago" else "$hours hours ago"
-        minutes> 0 -> if(minutes == 1L)  "$minutes minute ago" else "$minutes minutes ago"
-        else  -> "$seconds seconds ago"
+        minutes> 0 -> if(minutes == 1L)  "$minutes min ago" else "$minutes min ago"
+        else  -> "$seconds sec ago"
     }
 }

@@ -14,12 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.hostEase.Navigation_App.navigation.BottomNavItems
-import com.example.hostEase.Navigation_App.viewmodel.HomeViewModel
 import com.example.hostEase.Navigation_App.navigation.NavGraph
+import com.example.hostEase.Navigation_App.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -48,7 +47,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
         ) {
 
             Scaffold (
-                topBar = { TopBar(title = "HostEase", drawerState = drawerState, scope = scope) },
+                topBar = { TopBar(title = "HostEase", drawerState = drawerState, scope = scope, openSearch = {}, openMenu = {}) },
                 bottomBar = {
                     BottomNavBar(navController = navController)
                 }

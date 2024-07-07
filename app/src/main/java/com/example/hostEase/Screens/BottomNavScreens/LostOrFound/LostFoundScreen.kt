@@ -44,8 +44,10 @@ fun LostFoundScreen(viewModel: LostFound_ViewModel,navController: NavController
 ) {
     val lostItems by viewModel.lostItems.collectAsStateWithLifecycle()
     val foundItems by viewModel.foundItems.collectAsStateWithLifecycle()
-    Column {
-        MatchesFound(viewModel = viewModel)
+
+    Column(modifier = Modifier
+        .fillMaxSize()) {
+        //MatchesFound(viewModel = viewModel)
 
         Column(
             modifier = Modifier

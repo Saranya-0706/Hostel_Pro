@@ -93,7 +93,7 @@ fun ProfileScreen(userViewModel: UserViewModel = viewModel(), userId : String) {
 
                 Button(onClick = {
                     launcher.launch("image/*")
-                }, modifier = Modifier.align(Alignment.CenterHorizontally)
+                }, modifier = Modifier.fillMaxWidth(0.5f).align(Alignment.CenterHorizontally)
                 ) {
                     Text(text = "Select Image")
                 }

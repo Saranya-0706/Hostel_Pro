@@ -1,7 +1,5 @@
 package com.example.hostEase.Screens.BottomNavScreens.Complaints
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,11 +10,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -24,17 +22,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.hostEase.Screens.BottomNavScreens.Announcements.AddAnnouncementDialog
-import com.example.hostEase.Screens.BottomNavScreens.Announcements.AnnouncementItem
 import com.example.hostEase.Screens.NavDrawerScreens.Profile.UserViewModel
 import kotlinx.coroutines.delay
 
@@ -46,6 +39,8 @@ fun ComplaintScreen( complaintViewModel: ComplaintViewModel = viewModel(), userV
     val currentUser by complaintViewModel.currentUser.collectAsStateWithLifecycle()
     val loading by complaintViewModel.loading.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
+    val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     var userRole by remember { mutableStateOf("Student") }
     var showAddDialog by remember { mutableStateOf(false) }
@@ -58,6 +53,7 @@ fun ComplaintScreen( complaintViewModel: ComplaintViewModel = viewModel(), userV
     userRole = user?.role ?: "Student"
 
     Scaffold (
+        //topBar = { TopBar(title = "HostEase", drawerState = drawerState, scope = scope, openSearch = {}, openMenu = {}) },
         floatingActionButton = {
             /*Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomEnd){
                 Column(

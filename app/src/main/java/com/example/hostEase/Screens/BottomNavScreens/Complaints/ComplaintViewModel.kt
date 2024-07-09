@@ -1,7 +1,6 @@
 package com.example.hostEase.Screens.BottomNavScreens.Complaints
 
 import androidx.lifecycle.ViewModel
-import com.example.hostEase.Screens.BottomNavScreens.Announcements.Announcement
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -59,12 +58,14 @@ class ComplaintViewModel : ViewModel() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val userName = snapshot.child("username").getValue(String ::class.java) ?: "Unknown"
                 val email = snapshot.child("email").getValue(String ::class.java) ?: "Unknown"
+                val hostel = snapshot.child("hostel").getValue(String ::class.java) ?: ""
 
                 val key = db.child("complaints").push().key ?: return
                 val complaint = complaint.copy(
                     id = key,
                     userName = userName,
                     email = email,
+                    hostel = hostel, //hostel of the complaint is same as the user adding it
                     userId = userId)
                 db.child("complaints").child(key).setValue(complaint).addOnCompleteListener {task->
                     if (task.isSuccessful)

@@ -4,16 +4,14 @@ import com.example.hostEase.authentication.AuthNavigation.Router
 import com.example.hostEase.authentication.AuthNavigation.Screen
 import com.example.hostEase.authentication.ViewModel.LoginViewModel
 import com.example.hostEase.authentication.ViewModel.RegisterViewModel
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 class AuthRepository() {
 
     private val database :DatabaseReference = FirebaseDatabase.getInstance().reference
-    fun register(userName : String, userRole : String, email : String, password : String,
+    fun register(userName : String, userRole : String,userHostel : String, email : String, password : String,
                  registerViewModel: RegisterViewModel = RegisterViewModel(),
                  onComplete: (Boolean, String?) -> Unit) {
 
@@ -32,7 +30,7 @@ class AuthRepository() {
                             "email" to email,
                             "role" to userRole,
                             "phone" to "",
-                            "hostel" to "",
+                            "hostel" to userHostel,
                             "profileImgUrl" to ""
                         )
 

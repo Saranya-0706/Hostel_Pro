@@ -31,18 +31,18 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.hostEase.authentication.ButtonComponent
-import com.example.hostEase.authentication.ClickableTextComponent
+import com.example.hostEase.R
+import com.example.hostEase.Screens.NavDrawerScreens.Settings.ForgotPassDialog
 import com.example.hostEase.authentication.AuthNavigation.Router
 import com.example.hostEase.authentication.AuthNavigation.Screen
+import com.example.hostEase.authentication.ButtonComponent
+import com.example.hostEase.authentication.ClickableTextComponent
 import com.example.hostEase.authentication.PassTextField
 import com.example.hostEase.authentication.TextBold
 import com.example.hostEase.authentication.TextField
-import com.example.hostEase.authentication.WelcomeImg
-import com.example.hostEase.R
-import com.example.hostEase.Screens.NavDrawerScreens.Settings.ForgotPassDialog
 import com.example.hostEase.authentication.ViewModel.LoginUIEvent
 import com.example.hostEase.authentication.ViewModel.LoginViewModel
+import com.example.hostEase.authentication.WelcomeImg
 
 @Composable
 fun LoginScreen(loginViewModel :  LoginViewModel = LoginViewModel()){
@@ -128,7 +128,7 @@ fun LoginScreen(loginViewModel :  LoginViewModel = LoginViewModel()){
 
                 Spacer(modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp))
+                    .weight(1f))
 
                 ButtonComponent(value = stringResource(id = R.string.login), onButtonClick = {
                     loginViewModel.onEvent(LoginUIEvent.LoginBtnClick(context))
@@ -138,7 +138,7 @@ fun LoginScreen(loginViewModel :  LoginViewModel = LoginViewModel()){
 
                 Spacer(modifier = Modifier
                     .fillMaxWidth()
-                    .height(15.dp))
+                    .height(10.dp))
 
                 ClickableTextComponent (loginClick = false, onTextSelected = {
 

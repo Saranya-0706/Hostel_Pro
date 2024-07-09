@@ -43,6 +43,7 @@ fun ComplaintScreen( complaintViewModel: ComplaintViewModel = viewModel(), userV
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     var userRole by remember { mutableStateOf("Student") }
+    var userHostel by remember { mutableStateOf("") }
     var showAddDialog by remember { mutableStateOf(false) }
     var currentTime by remember { mutableLongStateOf(System.currentTimeMillis()) }
 
@@ -51,6 +52,8 @@ fun ComplaintScreen( complaintViewModel: ComplaintViewModel = viewModel(), userV
         complaintViewModel.loadComplaint()
     }
     userRole = user?.role ?: "Student"
+    userHostel = user?.hostel ?: ""
+
 
     Scaffold (
         //topBar = { TopBar(title = "HostEase", drawerState = drawerState, scope = scope, openSearch = {}, openMenu = {}) },
@@ -84,22 +87,24 @@ fun ComplaintScreen( complaintViewModel: ComplaintViewModel = viewModel(), userV
             .padding(start = 12.dp, end = 12.dp, bottom = 5.dp)
             .verticalScroll(scrollState)){
             complaints.forEach {complaint ->
-                if (complaint.type == "Public") {
-                    ComplaintsItem(
-                        complaint = complaint,
-                        viewModel = complaintViewModel,
-                        userRole = userRole,
-                        currentTime = currentTime,
-                        canDelete = currentUser?.uid == complaint.userId,
-                        onUpvote = { complaintViewModel.upVoteComplaint(complaint.id) },
-                        onDownvote = { complaintViewModel.downVoteComplaint(complaint.id) },
-                        currentUser = currentUser
-                    )
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(10.dp)
-                    )
+                if (complaint.hostel == userHostel) {
+                    if (complaint.type == "Public") {
+                        ComplaintsItem(
+                            complaint = complaint,
+                            viewModel = complaintViewModel,
+                            userRole = userRole,
+                            currentTime = currentTime,
+                            canDelete = currentUser?.uid == complaint.userId,
+                            onUpvote = { complaintViewModel.upVoteComplaint(complaint.id) },
+                            onDownvote = { complaintViewModel.downVoteComplaint(complaint.id) },
+                            currentUser = currentUser
+                        )
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(10.dp)
+                        )
+                    }
                 }
             }
         }

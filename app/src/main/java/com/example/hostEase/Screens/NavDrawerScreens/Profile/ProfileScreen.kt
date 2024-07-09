@@ -89,18 +89,7 @@ fun ProfileScreen(userViewModel: UserViewModel = viewModel(), userId : String) {
 
                 Spacer(modifier = Modifier
                     .fillMaxWidth()
-                    .height(40.dp))
-
-                Button(onClick = {
-                    launcher.launch("image/*")
-                }, modifier = Modifier.fillMaxWidth(0.5f).align(Alignment.CenterHorizontally)
-                ) {
-                    Text(text = "Select Image")
-                }
-
-                Spacer(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(20.dp))
+                    .height(45.dp))
 
 
                 ProfileTextField(label = "UserName"){
@@ -115,17 +104,22 @@ fun ProfileScreen(userViewModel: UserViewModel = viewModel(), userId : String) {
                     phone = it
                 }
 
+
                 Spacer(modifier = Modifier
                     .fillMaxWidth()
-                    .height(8.dp))
+                    .height(60.dp))
 
-                ProfileTextField(label = "Hostel Name"){
-                    hostel = it
+                Button(onClick = {
+                    launcher.launch("image/*")
+                }, modifier = Modifier.fillMaxWidth(0.5f).align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = "Select Image")
                 }
 
                 Spacer(modifier = Modifier
                     .fillMaxWidth()
-                    .height(40.dp))
+                    .height(10.dp))
+
 
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
                     Button(onClick = {
@@ -140,7 +134,6 @@ fun ProfileScreen(userViewModel: UserViewModel = viewModel(), userId : String) {
                                             userId,
                                             phone,
                                             userName,
-                                            hostel,
                                             imgUrl
                                         ) {value->
                                             editing = !value
@@ -156,7 +149,6 @@ fun ProfileScreen(userViewModel: UserViewModel = viewModel(), userId : String) {
                                     userId,
                                     phone,
                                     userName,
-                                    hostel,
                                     it.profileImgUrl
                                 ) {value->
                                     editing = !value
@@ -165,7 +157,7 @@ fun ProfileScreen(userViewModel: UserViewModel = viewModel(), userId : String) {
                         }
 
                     }) {
-                        Text(text = "SAVE")
+                        Text(text = " Save ")
                     }
                 }
             }
@@ -210,7 +202,7 @@ fun ProfileScreen(userViewModel: UserViewModel = viewModel(), userId : String) {
 
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
                     Button(onClick = { editing = true }) {
-                        Text(text = "EDIT")
+                        Text(text = " Edit ")
                     }
                 }
 

@@ -132,11 +132,13 @@ fun PassTextField(label : String, onTextSelected: (String) -> Unit, errorStatus 
     val localFocusManager = LocalFocusManager.current
 
     OutlinedTextField(
-        label = { Box(modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(scrollState)){
-            Text(text = label, textAlign = TextAlign.Center, maxLines = 1)
-        } },
+        label = {
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(scrollState)){
+                Text(text = label, textAlign = TextAlign.Center, maxLines = 1)
+            }
+                },
         modifier = Modifier
             .fillMaxWidth()
             .height(70.dp)
@@ -267,7 +269,8 @@ fun ClickableTextComponent(loginClick:Boolean = true, onTextSelected: (String) -
         text = annotatedString,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp),
+            .padding(5.dp)
+            .padding(bottom = 15.dp),
         style = TextStyle(fontSize = 15.sp, textAlign = TextAlign.Center)
     ) {
         onTextSelected(loginRegTxt)

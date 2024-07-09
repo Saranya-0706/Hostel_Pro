@@ -43,6 +43,7 @@ fun GeneralScreen(viewModel: AnnouncementViewModel = viewModel(), userViewModel:
 
 
     var userRole by remember { mutableStateOf("Student") }
+    var userHostel by remember { mutableStateOf("") }
     var showAddDialog by remember { mutableStateOf(false) }
     var currentTime by remember { mutableLongStateOf(System.currentTimeMillis()) }
 
@@ -52,6 +53,7 @@ fun GeneralScreen(viewModel: AnnouncementViewModel = viewModel(), userViewModel:
         viewModel.loadAnnouncements()
     }
     userRole = user?.role ?: "Student"
+    userHostel = user?.hostel ?: ""
 
     Scaffold (
         //topBar = { TopBar(title = "HostEase", drawerState = drawerState, scope = scope, openSearch = {}, openMenu = {}) },
@@ -86,10 +88,15 @@ fun GeneralScreen(viewModel: AnnouncementViewModel = viewModel(), userViewModel:
             .padding(start = 12.dp, end = 12.dp, bottom = 5.dp)
             .verticalScroll(scrollState)){
             announcements.forEach {announcement ->
-                AnnouncementItem(announcement = announcement,viewModel,userRole,currentTime)
-                Spacer(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(10.dp))
+
+                if (announcement.hostel == userHostel) {
+                    AnnouncementItem(announcement = announcement, viewModel, userRole, currentTime)
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(10.dp)
+                    )
+                }
             }
         }
         if (showAddDialog){

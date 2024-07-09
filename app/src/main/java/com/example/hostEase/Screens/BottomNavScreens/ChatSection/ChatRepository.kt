@@ -39,6 +39,7 @@ object ChatRepository {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val userName = snapshot.child("username").getValue(String ::class.java) ?: "Unknown"
                 val email = snapshot.child("email").getValue(String ::class.java) ?: "Unknown"
+                val hostel = snapshot.child("hostel").getValue(String ::class.java) ?: ""
 
                 val messageId = db.child("chatRooms").child(chatRoomId).child("messages").push().key ?: return
                 val message = message.copy(

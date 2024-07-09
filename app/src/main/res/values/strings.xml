@@ -5,6 +5,7 @@
     <string name="name">UserName</string>
     <string name="email">Email</string>
     <string name="pass">Password</string>
+    <string name="confirmPass">Confirm Password</string>
     <string name="loginTxt">Already have a account? </string>
     <string name="registerTxt">Do not have an account yet? </string>
 </resources>

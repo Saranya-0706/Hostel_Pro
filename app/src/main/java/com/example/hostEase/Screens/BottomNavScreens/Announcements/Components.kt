@@ -51,12 +51,42 @@ fun AnnouncementItem(announcement: Announcement, viewModel: AnnouncementViewMode
     var showDeleteDialog by remember {
         mutableStateOf(false)
     }
+    var showEmail by remember { mutableStateOf(false) }
+
    Card(modifier = Modifier.fillMaxWidth(), elevation = CardDefaults.cardElevation(4.dp)) {
        Column (
            modifier = Modifier
                .fillMaxWidth()
                .padding(15.dp)
        ){
+
+           Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
+               Column {
+                   ClickableText(
+                       text = buildAnnotatedString {
+                           withStyle(style = SpanStyle(color = colorResource(id = R.color.primaryColor))){
+                               append(announcement.userName)
+                           }
+                       }, onClick = {
+                           showEmail = !showEmail
+                       }
+                   )
+
+                   if (showEmail)
+                       Text(text = announcement.email)
+               }
+           }
+
+           Spacer(modifier = Modifier
+               .fillMaxWidth()
+               .height(8.dp))
+
+           Divider()
+
+           Spacer(modifier = Modifier
+               .fillMaxWidth()
+               .height(2.dp))
+
            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                Text(text = announcement.heading, modifier = Modifier.weight(1f), style = TextStyle(
                    fontSize = 22.sp,
@@ -90,13 +120,6 @@ fun AnnouncementItem(announcement: Announcement, viewModel: AnnouncementViewMode
            Spacer(modifier = Modifier
                .fillMaxWidth()
                .height(5.dp))
-
-           Divider()
-
-           Spacer(modifier = Modifier
-               .fillMaxWidth()
-               .height(8.dp))
-
 
            Text(text = announcement.content, style = TextStyle(
                fontSize = 16.sp

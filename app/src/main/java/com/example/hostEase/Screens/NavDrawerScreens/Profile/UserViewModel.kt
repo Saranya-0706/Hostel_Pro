@@ -36,13 +36,12 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun updateUserProfile(userId: String, phone: String, userName: String, hostel: String, profileImgUri: String, onComplete: (Boolean) -> Unit) {
+    fun updateUserProfile(userId: String, phone: String, userName: String, profileImgUri: String, onComplete: (Boolean) -> Unit) {
         viewModelScope.launch {
 
             val updatedUser = _user.value?.copy(
                 username = userName,
                 phone = phone,
-                hostel = hostel,
                 profileImgUrl = profileImgUri
             )
             updatedUser?.let {

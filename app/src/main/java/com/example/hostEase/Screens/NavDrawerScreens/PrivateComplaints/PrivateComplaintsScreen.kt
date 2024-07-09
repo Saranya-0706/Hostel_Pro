@@ -1,7 +1,5 @@
 package com.example.hostEase.Screens.NavDrawerScreens.PrivateComplaints
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,8 +13,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,12 +21,8 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hostEase.Screens.BottomNavScreens.Complaints.AddComplaintDialog
@@ -48,6 +40,7 @@ fun PrivateComplaints(complaintViewModel: ComplaintViewModel = viewModel(), user
     val scrollState = rememberScrollState()
 
     var userRole by remember { mutableStateOf("Student") }
+    var userHostel by remember { mutableStateOf("") }
     var showAddDialog by remember { mutableStateOf(false) }
     var currentTime by remember { mutableLongStateOf(System.currentTimeMillis()) }
 
@@ -56,6 +49,7 @@ fun PrivateComplaints(complaintViewModel: ComplaintViewModel = viewModel(), user
         complaintViewModel.loadComplaint()
     }
     userRole = user?.role ?: "Student"
+    userHostel = user?.hostel ?: ""
 
     Scaffold (
         floatingActionButton = {
@@ -88,23 +82,25 @@ fun PrivateComplaints(complaintViewModel: ComplaintViewModel = viewModel(), user
             .padding(start = 12.dp, end = 12.dp, bottom = 5.dp)
             .verticalScroll(scrollState)){
             complaints.forEach {complaint ->
-                if (complaint.type == "Private") {
-                    if (currentUser?.uid == complaint.userId || userRole == "Admin") {
-                        ComplaintsItem(
-                            complaint = complaint,
-                            viewModel = complaintViewModel,
-                            userRole = userRole,
-                            currentTime = currentTime,
-                            canDelete = currentUser?.uid == complaint.userId,
-                            onUpvote = { complaintViewModel.upVoteComplaint(complaint.id) },
-                            onDownvote = { complaintViewModel.downVoteComplaint(complaint.id) },
-                            currentUser = currentUser
-                        )
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(10.dp)
-                        )
+                if (complaint.hostel == userHostel) {
+                    if (complaint.type == "Private") {
+                        if (currentUser?.uid == complaint.userId || userRole == "Admin") {
+                            ComplaintsItem(
+                                complaint = complaint,
+                                viewModel = complaintViewModel,
+                                userRole = userRole,
+                                currentTime = currentTime,
+                                canDelete = currentUser?.uid == complaint.userId,
+                                onUpvote = { complaintViewModel.upVoteComplaint(complaint.id) },
+                                onDownvote = { complaintViewModel.downVoteComplaint(complaint.id) },
+                                currentUser = currentUser
+                            )
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(10.dp)
+                            )
+                        }
                     }
                 }
             }

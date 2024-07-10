@@ -1,51 +1,34 @@
 package com.example.hostEase.Screens.BottomNavScreens.ChatSection
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.hostEase.Screens.NavDrawerScreens.Profile.UserViewModel
 
 @Composable
-fun ChatSwitcher(chatViewModel: ChatViewModel = viewModel()) {
+fun ChatSwitcher(chatViewModel: ChatViewModel = viewModel(),userViewModel: UserViewModel = viewModel()) {
 
-    ChatScreen("Students Chat",chatViewModel)
+    val user by userViewModel.user.observeAsState()
+    val currentUser by chatViewModel.currentUser.collectAsStateWithLifecycle()
+    var userRole by remember { mutableStateOf("") }
+    var userHostel by remember { mutableStateOf("") }
 
-    /*val chatOptions = listOf("Students Chat", "Student Admin Chat")
-    var selectedChat by remember {
-        mutableStateOf(chatOptions[0])
+    LaunchedEffect(Unit) {
+        userViewModel.loadUserProfile()
     }
+    userRole = user?.role ?: "Student"
+    userHostel = user?.hostel ?: ""
 
-    var expanded by remember { mutableStateOf(false) }
-
-    Column {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .padding(15.dp)
-            .padding(top = 0.dp)
-        ){
-            TextButton(onClick = { expanded = !expanded }
-            ) {
-                Text(text = selectedChat)
-            }
-
-            DropdownMenu(expanded = expanded, onDismissRequest = { expanded =  false }) {
-                chatOptions.forEach {chatOption->
-                    DropdownMenuItem(
-                        text = { Text(text = chatOption)},
-                        onClick = {
-                            selectedChat = chatOption
-                            expanded  = false
-                        })
-
-                }
-            }
-
-        }
-
-        when(selectedChat){
-            "Students Chat" -> ChatScreen("Students Chat",chatViewModel)
-            "Student Admin Chat" -> ChatScreen("Student Admin Chat", chatViewModel)
-
-        }
+    Box(modifier = Modifier.fillMaxSize()){
+        ChatScreen(hostel = userHostel, userRole = userRole)
     }
-
-     */
 }

@@ -5,6 +5,7 @@ data class ChatMessage(
     val senderId : String = "",
     val senderEmail : String = "",
     val senderName : String = "",
+    val senderRole : String = "",
     val hostel : String = "",
     val message : String = "",
     val timeStamp : Long = 0L

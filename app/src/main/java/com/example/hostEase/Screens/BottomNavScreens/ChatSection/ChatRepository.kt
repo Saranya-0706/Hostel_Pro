@@ -13,11 +13,11 @@ object ChatRepository {
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseDatabase.getInstance().reference
 
-    fun getMessages(chatRoomId : String): StateFlow<List<ChatMessage>>{
+    fun getMessages(hostel : String, userRole : String ): StateFlow<List<ChatMessage>>{
 
         val messagesFlow = MutableStateFlow<List<ChatMessage>>(emptyList())
 
-        db.child("chatRooms").child(chatRoomId).child("messages").addValueEventListener(object : ValueEventListener{
+        db.child("chatRooms").child(hostel).child("$userRole messages").addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val messages = snapshot.children.mapNotNull {dataSnapshot ->
                     dataSnapshot.getValue(ChatMessage::class.java)?.copy(id = dataSnapshot.key ?: "")
@@ -30,7 +30,7 @@ object ChatRepository {
         return messagesFlow
     }
 
-    fun sendMessage(chatRoomId: String, message: ChatMessage){
+    fun sendMessage(hostel: String,userRole: String, message: ChatMessage){
 
         val user = auth.currentUser ?: return
         val userId = user.uid
@@ -39,16 +39,18 @@ object ChatRepository {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val userName = snapshot.child("username").getValue(String ::class.java) ?: "Unknown"
                 val email = snapshot.child("email").getValue(String ::class.java) ?: "Unknown"
-                val hostel = snapshot.child("hostel").getValue(String ::class.java) ?: ""
+                val role = snapshot.child("role").getValue(String ::class.java) ?: ""
 
-                val messageId = db.child("chatRooms").child(chatRoomId).child("messages").push().key ?: return
+                val messageId = db.child("chatRooms").child(hostel).child("$userRole messages").push().key ?: return
                 val message = message.copy(
                     id = messageId,
                     senderId = userId,
                     senderEmail = email,
-                    senderName = userName
+                    senderName = userName,
+                    hostel = hostel,
+                    senderRole = userRole
                 )
-                db.child("chatRooms").child(chatRoomId).child("messages").child(messageId).setValue(message)
+                db.child("chatRooms").child(hostel).child("$userRole messages").child(messageId).setValue(message)
 
 
             }
@@ -60,7 +62,9 @@ object ChatRepository {
         })
     }
 
-
+    fun deleteMessage(userRole: String, hostel: String, messageId : String){
+        db.child("chatRooms").child(hostel).child("$userRole messages").child(messageId).removeValue()
+    }
 
 
 }

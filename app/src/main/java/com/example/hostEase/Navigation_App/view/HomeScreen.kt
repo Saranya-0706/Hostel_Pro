@@ -11,7 +11,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -32,6 +36,14 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
         val scope = rememberCoroutineScope()
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
+        var currentRoute by remember {
+            mutableStateOf("home")
+        }
+
+        var searchValue by remember {
+            mutableStateOf("")
+        }
+
         val items = homeViewModel.navDrawerItems
 
         ModalNavigationDrawer(
@@ -41,15 +53,28 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
                     NavDrawer(navController = navController,
                         drawerState = drawerState,
                         scope = scope,
-                        items = items)
+                        items = items,
+                        onTabSelected = {route->
+                            currentRoute = route
+                            searchValue = ""
+                            homeViewModel.deactivateSearch()
+                        })
                 }
             }
         ) {
-
             Scaffold (
-                topBar = { TopBar(title = "HostEase", drawerState = drawerState, scope = scope, openSearch = {}, openMenu = {}) },
+                topBar = { TopBar(title = "HostEase", drawerState = drawerState, scope = scope,
+                    showSearchIcon = shouldShowSearch(currentRoute),
+                    searchValueChange = {
+                        searchValue = it
+                    }
+                ) },
                 bottomBar = {
-                    BottomNavBar(navController = navController)
+                    BottomNavBar(navController = navController, onTabSelected = {route->
+                        homeViewModel.deactivateSearch()
+                        searchValue = ""
+                        currentRoute = route
+                    })
                 }
             ){
                 val padding = it
@@ -59,7 +84,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
                         .background(Color.White)
                         .padding(padding)
                 ){
-                    NavGraph(navController = navController)
+                    NavGraph(searchValue, navController = navController)
                 }
 
             }
@@ -73,4 +98,8 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
             }
         }
     }
+}
+
+fun shouldShowSearch(route : String?) :  Boolean{
+    return route in listOf("home", "complaint", "PrivateComplaints")
 }

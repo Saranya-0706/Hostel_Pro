@@ -26,15 +26,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hostEase.Screens.BottomNavScreens.Complaints.AddComplaintDialog
+import com.example.hostEase.Screens.BottomNavScreens.Complaints.Complaint
 import com.example.hostEase.Screens.BottomNavScreens.Complaints.ComplaintViewModel
 import com.example.hostEase.Screens.BottomNavScreens.Complaints.ComplaintsItem
 import com.example.hostEase.Screens.NavDrawerScreens.Profile.UserViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun PrivateComplaints(complaintViewModel: ComplaintViewModel = viewModel(), userViewModel: UserViewModel = viewModel()) {
+fun PrivateComplaints(searchValue : String, complaintViewModel: ComplaintViewModel = viewModel(), userViewModel: UserViewModel = viewModel()) {
     val user by userViewModel.user.observeAsState()
-    val complaints by complaintViewModel.complaints.collectAsStateWithLifecycle()
+    val allComplaints by complaintViewModel.complaints.collectAsStateWithLifecycle()
+    val filteredComplaints by complaintViewModel.searchMatchedComplaints.collectAsStateWithLifecycle()
+    var complaints : List<Complaint>
     val currentUser by complaintViewModel.currentUser.collectAsStateWithLifecycle()
     val loading by complaintViewModel.loading.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
@@ -50,6 +53,10 @@ fun PrivateComplaints(complaintViewModel: ComplaintViewModel = viewModel(), user
     }
     userRole = user?.role ?: "Student"
     userHostel = user?.hostel ?: ""
+
+    LaunchedEffect(searchValue) {
+        complaintViewModel.loadSearchedComplaints(searchValue)
+    }
 
     Scaffold (
         floatingActionButton = {
@@ -81,11 +88,19 @@ fun PrivateComplaints(complaintViewModel: ComplaintViewModel = viewModel(), user
             .fillMaxSize()
             .padding(start = 12.dp, end = 12.dp, bottom = 5.dp)
             .verticalScroll(scrollState)){
+
+            if (searchValue.isNotEmpty()) {
+                complaints = filteredComplaints
+            }else{
+                complaints = allComplaints
+            }
+
             complaints.forEach {complaint ->
                 if (complaint.hostel == userHostel) {
                     if (complaint.type == "Private") {
                         if (currentUser?.uid == complaint.userId || userRole == "Admin") {
                             ComplaintsItem(
+                                searchValue = searchValue,
                                 complaint = complaint,
                                 viewModel = complaintViewModel,
                                 userRole = userRole,

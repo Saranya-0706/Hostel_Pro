@@ -10,11 +10,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,7 +20,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -32,15 +29,15 @@ import com.example.hostEase.Screens.NavDrawerScreens.Profile.UserViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun ComplaintScreen( complaintViewModel: ComplaintViewModel = viewModel(), userViewModel: UserViewModel = viewModel()) {
+fun ComplaintScreen(searchValue : String, complaintViewModel: ComplaintViewModel = viewModel(), userViewModel: UserViewModel = viewModel()) {
 
     val user by userViewModel.user.observeAsState()
-    val complaints by complaintViewModel.complaints.collectAsStateWithLifecycle()
+    val allComplaints by complaintViewModel.complaints.collectAsStateWithLifecycle()
+    val filteredComplaints by complaintViewModel.searchMatchedComplaints.collectAsStateWithLifecycle()
+    var complaints : List<Complaint>
     val currentUser by complaintViewModel.currentUser.collectAsStateWithLifecycle()
     val loading by complaintViewModel.loading.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
-    val scope = rememberCoroutineScope()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     var userRole by remember { mutableStateOf("Student") }
     var userHostel by remember { mutableStateOf("") }
@@ -54,10 +51,12 @@ fun ComplaintScreen( complaintViewModel: ComplaintViewModel = viewModel(), userV
     userRole = user?.role ?: "Student"
     userHostel = user?.hostel ?: ""
 
+    LaunchedEffect(searchValue) {
+        complaintViewModel.loadSearchedComplaints(searchValue)
+    }
 
     Scaffold (
-        //topBar = { TopBar(title = "HostEase", drawerState = drawerState, scope = scope, openSearch = {}, openMenu = {}) },
-        floatingActionButton = {
+       floatingActionButton = {
             /*Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomEnd){
                 Column(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -86,10 +85,18 @@ fun ComplaintScreen( complaintViewModel: ComplaintViewModel = viewModel(), userV
             .fillMaxSize()
             .padding(start = 12.dp, end = 12.dp, bottom = 5.dp)
             .verticalScroll(scrollState)){
-            complaints.forEach {complaint ->
+
+            if (searchValue.isNotEmpty()) {
+                complaints = filteredComplaints
+            }else{
+                complaints = allComplaints
+            }
+
+            complaints.forEach { complaint ->
                 if (complaint.hostel == userHostel) {
                     if (complaint.type == "Public") {
                         ComplaintsItem(
+                            searchValue = searchValue,
                             complaint = complaint,
                             viewModel = complaintViewModel,
                             userRole = userRole,
@@ -107,6 +114,7 @@ fun ComplaintScreen( complaintViewModel: ComplaintViewModel = viewModel(), userV
                     }
                 }
             }
+
         }
         if (showAddDialog){
             AddComplaintDialog(viewModel = complaintViewModel, onComplete = {

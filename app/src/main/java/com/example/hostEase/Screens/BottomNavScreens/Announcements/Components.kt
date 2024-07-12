@@ -43,9 +43,10 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.example.hostEase.R
 import com.example.hostEase.Screens.BottomNavScreens.getTimeAgo
+import com.example.hostEase.Screens.HighlightedText
 
 @Composable
-fun AnnouncementItem(announcement: Announcement, viewModel: AnnouncementViewModel, userRole : String?, currentTime : Long){
+fun AnnouncementItem( searchValue : String, announcement: Announcement, viewModel: AnnouncementViewModel, userRole : String?, currentTime : Long){
     val context = LocalContext.current
     val colorPrim = colorResource(id = R.color.primaryColor)
     var showDeleteDialog by remember {
@@ -88,10 +89,8 @@ fun AnnouncementItem(announcement: Announcement, viewModel: AnnouncementViewMode
                .height(2.dp))
 
            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-               Text(text = announcement.heading, modifier = Modifier.weight(1f), style = TextStyle(
-                   fontSize = 22.sp,
-                   // fontWeight = FontWeight.SemiBold
-               ))
+
+               HighlightedText(text = announcement.heading, searchValue = searchValue, modifier = Modifier.weight(1f), fontSize = 22.sp)
 
                if (userRole!= "Student"){
                    IconButton(onClick = {
@@ -121,9 +120,7 @@ fun AnnouncementItem(announcement: Announcement, viewModel: AnnouncementViewMode
                .fillMaxWidth()
                .height(5.dp))
 
-           Text(text = announcement.content, style = TextStyle(
-               fontSize = 16.sp
-           ))
+           HighlightedText(text = announcement.content, searchValue = searchValue, modifier = Modifier, fontSize = 16.sp)
 
            Spacer(modifier = Modifier
                .fillMaxWidth()

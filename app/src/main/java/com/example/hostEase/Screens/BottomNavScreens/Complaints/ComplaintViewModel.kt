@@ -20,6 +20,9 @@ class ComplaintViewModel : ViewModel() {
     private val _complaints = MutableStateFlow<List<Complaint>>(emptyList())
     val complaints = _complaints.asStateFlow()
 
+    private val _searchMatchedComplaints = MutableStateFlow<List<Complaint>>(emptyList())
+    val searchMatchedComplaints = _searchMatchedComplaints.asStateFlow()
+
     private val _currentUser = MutableStateFlow<FirebaseUser?>(auth.currentUser)
     val currentUser = _currentUser.asStateFlow()
 
@@ -159,6 +162,20 @@ class ComplaintViewModel : ViewModel() {
             }
 
         })
+    }
+
+    fun loadSearchedComplaints(searchValue : String){
+
+        if (searchValue.isNotEmpty()){
+            val regex = Regex("\\b$searchValue", RegexOption.IGNORE_CASE)
+            val filteredList = _complaints.value.filter { complaint ->
+                regex.containsMatchIn(complaint.heading) || regex.containsMatchIn(complaint.content)
+            }
+            _searchMatchedComplaints.value = filteredList
+        }else{
+            _searchMatchedComplaints.value = _complaints.value
+        }
+
     }
 
 }

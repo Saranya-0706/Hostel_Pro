@@ -48,10 +48,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hostEase.R
 import com.example.hostEase.Screens.BottomNavScreens.getTimeAgo
+import com.example.hostEase.Screens.HighlightedText
 import com.google.firebase.auth.FirebaseUser
 
 @Composable
-fun ComplaintsItem(complaint: Complaint,viewModel: ComplaintViewModel,
+fun ComplaintsItem(searchValue : String, complaint: Complaint,viewModel: ComplaintViewModel,
                    userRole : String?, currentTime : Long, currentUser : FirebaseUser? ,
                    canDelete : Boolean, onUpvote : (String) -> Unit, onDownvote : (String) -> Unit
 ){
@@ -97,11 +98,8 @@ fun ComplaintsItem(complaint: Complaint,viewModel: ComplaintViewModel,
                 .height(2.dp))
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text(text = complaint.heading, modifier = Modifier.weight(1f), style = TextStyle(
-                    fontSize = 22.sp,
-                    // fontWeight = FontWeight.SemiBold
-                )
-                )
+
+                HighlightedText(text = complaint.content, searchValue = searchValue, modifier = Modifier.weight(1f), fontSize = 22.sp)
 
                 if (canDelete){
                     IconButton(onClick = {
@@ -132,9 +130,7 @@ fun ComplaintsItem(complaint: Complaint,viewModel: ComplaintViewModel,
                 .height(5.dp))
 
 
-            Text(text = complaint.content, style = TextStyle(
-                fontSize = 16.sp
-            ))
+            HighlightedText(text = complaint.content, searchValue = searchValue, modifier = Modifier , fontSize = 16.sp )
 
             Spacer(modifier = Modifier
                 .fillMaxWidth()

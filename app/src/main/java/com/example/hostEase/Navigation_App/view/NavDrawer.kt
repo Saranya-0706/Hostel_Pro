@@ -26,7 +26,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun NavDrawer(navController: NavController, drawerState: DrawerState, scope : CoroutineScope, items : List<NavDrawerItems>){
+fun NavDrawer(navController: NavController, drawerState: DrawerState,
+              scope : CoroutineScope, items : List<NavDrawerItems>,
+              onTabSelected : (String) -> Unit){
 
     Box(modifier = Modifier
         .background(colorResource(id = R.color.primaryColor))
@@ -57,6 +59,7 @@ fun NavDrawer(navController: NavController, drawerState: DrawerState, scope : Co
                     scope.launch {
                         drawerState.close()
                     }
+                    onTabSelected(navItem.route)
                     navController.navigate(navItem.route){
                         popUpTo(BottomNavItems.General.route){
                             saveState = true}

@@ -16,6 +16,9 @@ class AnnouncementViewModel: ViewModel() {
     private val _announcements = MutableStateFlow<List<Announcement>>(emptyList())
     val announcements = _announcements.asStateFlow()
 
+    private val _searchMatchedAnnouncements = MutableStateFlow<List<Announcement>>(emptyList())
+    val searchMatchedAnnouncements = _searchMatchedAnnouncements.asStateFlow()
+
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
 
@@ -82,5 +85,19 @@ class AnnouncementViewModel: ViewModel() {
             else
                 onComplete(false)
         }
+    }
+
+    fun loadSearchedAnnouncements(searchValue : String){
+
+      if (searchValue.isNotEmpty()){
+          val regex = Regex("\\b$searchValue", RegexOption.IGNORE_CASE)
+          val filteredList = _announcements.value.filter { announcement ->
+              regex.containsMatchIn(announcement.heading) || regex.containsMatchIn(announcement.content)
+          }
+          _searchMatchedAnnouncements.value = filteredList
+      }else{
+          _searchMatchedAnnouncements.value = _announcements.value
+      }
+
     }
 }

@@ -14,7 +14,7 @@ import com.example.hostEase.Navigation_App.navigation.BottomNavItems
 import com.example.hostEase.R
 
 @Composable
-fun BottomNavBar(navController : NavController){
+fun BottomNavBar(navController : NavController, onTabSelected: (String) -> Unit){
     val items = listOf(
         BottomNavItems.General,
         BottomNavItems.Complaints,
@@ -34,6 +34,7 @@ fun BottomNavBar(navController : NavController){
             NavigationBarItem(
                 selected = bottomNavItem.route == currentRouteAsState,
                 onClick = {
+                    onTabSelected(bottomNavItem.route)
                     navController.navigate(bottomNavItem.route){
 
                         popUpTo(BottomNavItems.General.route)

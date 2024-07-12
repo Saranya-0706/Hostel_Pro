@@ -10,11 +10,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,7 +20,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -32,14 +29,18 @@ import com.example.hostEase.Screens.NavDrawerScreens.Profile.UserViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun GeneralScreen(viewModel: AnnouncementViewModel = viewModel(), userViewModel: UserViewModel = viewModel()) {
+fun GeneralScreen(
+    searchValue : String,
+    viewModel: AnnouncementViewModel = viewModel(),
+    userViewModel: UserViewModel = viewModel()
+) {
 
     val user by userViewModel.user.observeAsState()
-    val announcements by viewModel.announcements.collectAsStateWithLifecycle()
+    val allAnnouncements by viewModel.announcements.collectAsStateWithLifecycle()
+    val filteredAnnouncements by viewModel.searchMatchedAnnouncements.collectAsStateWithLifecycle()
+    var announcements : List<Announcement>
     val loading by viewModel.loading.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
-    val scope = rememberCoroutineScope()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
 
     var userRole by remember { mutableStateOf("Student") }
@@ -55,9 +56,11 @@ fun GeneralScreen(viewModel: AnnouncementViewModel = viewModel(), userViewModel:
     userRole = user?.role ?: "Student"
     userHostel = user?.hostel ?: ""
 
-    Scaffold (
-        //topBar = { TopBar(title = "HostEase", drawerState = drawerState, scope = scope, openSearch = {}, openMenu = {}) },
+    LaunchedEffect(searchValue) {
+        viewModel.loadSearchedAnnouncements(searchValue)
+    }
 
+    Scaffold (
         floatingActionButton = {
             /*Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomEnd){
                 Column(
@@ -87,10 +90,22 @@ fun GeneralScreen(viewModel: AnnouncementViewModel = viewModel(), userViewModel:
             .fillMaxSize()
             .padding(start = 12.dp, end = 12.dp, bottom = 5.dp)
             .verticalScroll(scrollState)){
-            announcements.forEach {announcement ->
 
+            if (searchValue.isNotEmpty()) {
+                announcements = filteredAnnouncements
+            }else{
+                announcements = allAnnouncements
+            }
+
+            announcements.forEach { announcement ->
                 if (announcement.hostel == userHostel) {
-                    AnnouncementItem(announcement = announcement, viewModel, userRole, currentTime)
+                    AnnouncementItem(
+                        searchValue = searchValue,
+                        announcement = announcement,
+                        viewModel,
+                        userRole,
+                        currentTime
+                    )
                     Spacer(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -98,6 +113,7 @@ fun GeneralScreen(viewModel: AnnouncementViewModel = viewModel(), userViewModel:
                     )
                 }
             }
+
         }
         if (showAddDialog){
             AddAnnouncementDialog(viewModel = viewModel, onComplete = {

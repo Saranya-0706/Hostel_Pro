@@ -65,6 +65,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
             Scaffold (
                 topBar = { TopBar(title = "HostEase", drawerState = drawerState, scope = scope,
                     showSearchIcon = shouldShowSearch(currentRoute),
+                    showMenuIcon = shouldShowMenu(currentRoute),
                     searchValueChange = {
                         searchValue = it
                     }
@@ -102,4 +103,8 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
 
 fun shouldShowSearch(route : String?) :  Boolean{
     return route in listOf("home", "complaint", "PrivateComplaints")
+}
+
+fun shouldShowMenu(route : String?) :  Boolean{
+    return route in listOf("lostFound")
 }

@@ -81,7 +81,9 @@ fun Item(item :LostFoundItem, viewModel: LostFound_ViewModel,navController: NavC
         )
 
         Row(horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.CenterVertically) {
-            Box(modifier = Modifier.horizontalScroll(scrollState).weight(0.1f)) {
+            Box(modifier = Modifier
+                .horizontalScroll(scrollState)
+                .weight(0.1f)) {
                 Text(text = item.name, fontSize = 18.sp, textAlign = TextAlign.Center)
             }
 
@@ -97,7 +99,9 @@ fun Item(item :LostFoundItem, viewModel: LostFound_ViewModel,navController: NavC
 
 @Composable
 fun MatchesFound(viewModel: LostFound_ViewModel){
-    Text(text = "Matches Found : ", modifier = Modifier.padding(10.dp).padding(bottom = 0.dp))
+    Text(text = "Matches Found : ", modifier = Modifier
+        .padding(10.dp)
+        .padding(bottom = 0.dp))
 }
 
 

@@ -8,6 +8,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,6 +17,7 @@ class LostFound_ViewModel : ViewModel() {
 
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseDatabase.getInstance().reference
+    private val fireStore = FirebaseFirestore.getInstance()
     private val storage = FirebaseStorage.getInstance().reference
 
     private val _currentUser = MutableStateFlow<FirebaseUser?>(auth.currentUser)
@@ -30,7 +32,11 @@ class LostFound_ViewModel : ViewModel() {
     private val _item = MutableStateFlow<LostFoundItem?>(null)
     val item = _item.asStateFlow()
 
+    private val _LFCategories = MutableStateFlow<List<LFCategory>>(emptyList())
+    val LFCategories = _LFCategories.asStateFlow()
+
     init {
+        fetchCategories()
         loadItems()
     }
 
@@ -48,6 +54,7 @@ class LostFound_ViewModel : ViewModel() {
             }
 
         })
+
 
         db.child("found").addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -68,7 +75,8 @@ class LostFound_ViewModel : ViewModel() {
         val user = auth.currentUser ?: return
         val userId = user.uid
 
-        db.child(type).child(userId).addListenerForSingleValueEvent(object :ValueEventListener{
+        db.child(type).child(userId)
+            .addListenerForSingleValueEvent(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val key = db.child(type).push().key ?: return
                 val item = item.copy(id = key,userId = userId)
@@ -114,6 +122,31 @@ class LostFound_ViewModel : ViewModel() {
         })
 
     }
+
+    fun fetchCategories(){
+        fireStore.collection("LFcategories").get().addOnSuccessListener {result->
+            val categoriesList = mutableListOf<LFCategory>()
+
+            result.documents.forEach {document->
+                val categoryName = document.getString("name") ?: return@forEach
+                fetchSubCategories(categoryName){subCategories ->
+                    categoriesList.add(LFCategory(categoryName, subCategories))
+                    _LFCategories.value = categoriesList
+                }
+            }
+        }
+    }
+
+    fun fetchSubCategories(categoryName : String,callback : (List<String>) -> Unit ){
+        fireStore.collection("LFcategories").document(categoryName).collection("SubCategories").get()
+            .addOnSuccessListener { result->
+                val subCategories = result.documents.mapNotNull {
+                   it.getString("name")
+                }
+                callback(subCategories)
+            }
+    }
+
 }
 
 

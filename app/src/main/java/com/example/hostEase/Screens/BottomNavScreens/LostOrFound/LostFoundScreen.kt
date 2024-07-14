@@ -17,6 +17,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -44,6 +48,7 @@ fun LostFoundScreen(viewModel: LostFound_ViewModel,navController: NavController
 ) {
     val lostItems by viewModel.lostItems.collectAsStateWithLifecycle()
     val foundItems by viewModel.foundItems.collectAsStateWithLifecycle()
+
 
     Column(modifier = Modifier
         .fillMaxSize()) {
@@ -81,7 +86,9 @@ fun LostFoundScreen(viewModel: LostFound_ViewModel,navController: NavController
 
             }
 
-            Spacer(modifier = Modifier.fillMaxWidth().height(12.dp))
+            Spacer(modifier = Modifier
+                .fillMaxWidth()
+                .height(12.dp))
 
             Column(modifier = Modifier
                 .fillMaxWidth()
@@ -120,13 +127,20 @@ fun x(){
     LostFoundScreen(viewModel = viewModel(), navController = rememberNavController())
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddItem(viewModel: LostFound_ViewModel, type : String, navController: NavController){
     var name by remember { mutableStateOf("") }
     var model by remember { mutableStateOf("") }
     var itemDetails by remember { mutableStateOf("") }
     var contact by remember { mutableStateOf("") }
+    var categorySelected by remember { mutableStateOf("") }
+    var subCategorySelected by remember { mutableStateOf("Other") }
     var imgUri by remember { mutableStateOf<Uri?>(null) }
+    var categoryExpanded by remember { mutableStateOf(false) }
+    var subCategoryExpanded by remember { mutableStateOf(false) }
+
+    val categories by viewModel.LFCategories.collectAsStateWithLifecycle()
 
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri->
         imgUri = uri
@@ -140,6 +154,66 @@ fun AddItem(viewModel: LostFound_ViewModel, type : String, navController: NavCon
         Text(text = "Add $type Item", fontSize = 22.sp, textAlign = TextAlign.Center, modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 10.dp))
+
+        ExposedDropdownMenuBox(
+            expanded = categoryExpanded,
+            onExpandedChange = { categoryExpanded = it }) {
+            OutlinedTextField(value = categorySelected, onValueChange = {}, readOnly = true,
+                label = { Text(text = "Select Category ") },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryExpanded)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor()
+            )
+            ExposedDropdownMenu(
+                expanded = categoryExpanded,
+                onDismissRequest = { categoryExpanded = false}) {
+                categories.forEach {category->
+                    DropdownMenuItem(text = { Text(text = category.name) }, onClick = {
+                        categorySelected = category.name
+                        subCategorySelected = ""
+                        categoryExpanded = false
+                    })
+                }
+                DropdownMenuItem(text = { Text(text = "Other") }, onClick = {
+                    categorySelected = "Other"
+                    subCategorySelected = "Other"
+                    categoryExpanded = false
+                })
+            }
+        }
+
+        val subCategories = categories.find {
+            it.name == categorySelected
+        }?.subCategories ?: emptyList()
+
+        if (subCategories.isNotEmpty() && categorySelected  != "Other") {
+            ExposedDropdownMenuBox(
+                expanded = subCategoryExpanded,
+                onExpandedChange = { subCategoryExpanded = it }) {
+                OutlinedTextField(value = subCategorySelected, onValueChange = {}, readOnly = true,
+                    label = { Text(text = "Select Sub Category ") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = subCategoryExpanded)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor()
+                )
+                ExposedDropdownMenu(
+                    expanded = subCategoryExpanded,
+                    onDismissRequest = { subCategoryExpanded = false}) {
+                    subCategories.forEach {subCategory->
+                        DropdownMenuItem(text = { Text(text = subCategory) }, onClick = {
+                            subCategorySelected = subCategory
+                            subCategoryExpanded = false
+                        })
+                    }
+                }
+            }
+        }
 
         OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text(text = "Item Name")}, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(value = model, onValueChange = { model = it }, label = { Text(text = "Item Model")},modifier = Modifier.fillMaxWidth())
@@ -178,6 +252,8 @@ fun AddItem(viewModel: LostFound_ViewModel, type : String, navController: NavCon
                                 model = model,
                                 itemDetails = itemDetails,
                                 contactDetails = contact,
+                                category = categorySelected,
+                                subCategory = subCategorySelected,
                                 imgUrl = imgUrl
                             )
                             viewModel.addItem(item,type)
@@ -191,6 +267,8 @@ fun AddItem(viewModel: LostFound_ViewModel, type : String, navController: NavCon
                             name = name,
                             model = model,
                             itemDetails = itemDetails,
+                            category = categorySelected,
+                            subCategory = subCategorySelected,
                             contactDetails = contact)
                         viewModel.addItem(item,type)
                         navController.popBackStack()

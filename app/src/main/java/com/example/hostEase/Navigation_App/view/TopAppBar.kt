@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(title : String, showSearchIcon : Boolean,  drawerState: DrawerState,
+fun TopBar(title : String, showSearchIcon : Boolean,showMenuIcon : Boolean,  drawerState: DrawerState,
            scope : CoroutineScope ,
            searchValueChange : (String) -> Unit,
            homeViewModel: HomeViewModel = viewModel()){
@@ -42,7 +43,7 @@ fun TopBar(title : String, showSearchIcon : Boolean,  drawerState: DrawerState,
     LaunchedEffect(isSearchActive) {
         Log.d("TopBar Screen", "isSearchActive : $isSearchActive")
     }
-    if (showSearchIcon) {
+    if (showSearchIcon || showMenuIcon) {
         TopAppBar(
             title = {
                 if (isSearchActive) {
@@ -65,25 +66,30 @@ fun TopBar(title : String, showSearchIcon : Boolean,  drawerState: DrawerState,
                 }
             },
             actions = {
-
-                IconButton(onClick = {
-                    if(isSearchActive) {
-                        homeViewModel.deactivateSearch()
-                        searchValueChange("")
+                if (showSearchIcon) {
+                    IconButton(onClick = {
+                        if (isSearchActive) {
+                            homeViewModel.deactivateSearch()
+                            searchValueChange("")
+                        } else {
+                            homeViewModel.activateSearch()
+                        }
+                    })
+                    {
+                        if (isSearchActive)
+                            Icon(imageVector = Icons.Default.Close, contentDescription = "")
+                        else
+                            Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
                     }
-                    else {
-                        homeViewModel.activateSearch()
-                    }
-                })
-                {
-                    if (isSearchActive)
-                        Icon(imageVector = Icons.Default.Close, contentDescription = "")
-                    else
-                        Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
                 }
-//            IconButton(onClick = ) {
-//                Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Menu")
-//            }
+
+                if (showMenuIcon){
+                    IconButton(onClick = {
+                        homeViewModel.onMenuClicked()
+                    }) {
+                        Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Menu")
+                    }
+                }
             }
         )
     }else

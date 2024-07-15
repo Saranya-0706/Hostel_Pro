@@ -26,8 +26,14 @@ class LostFound_ViewModel : ViewModel() {
     private val _lostItems = MutableStateFlow<List<LostFoundItem>>(emptyList())
     val lostItems = _lostItems.asStateFlow()
 
+    private val _filteredLostItems = MutableStateFlow<List<LostFoundItem>>(emptyList())
+    val filteredLostItems = _filteredLostItems.asStateFlow()
+
     private val _foundItems = MutableStateFlow<List<LostFoundItem>>(emptyList())
     val foundItems = _foundItems.asStateFlow()
+
+    private val _filteredFoundItems = MutableStateFlow<List<LostFoundItem>>(emptyList())
+    val filteredFoundItems = _filteredFoundItems.asStateFlow()
 
     private val _item = MutableStateFlow<LostFoundItem?>(null)
     val item = _item.asStateFlow()
@@ -145,6 +151,57 @@ class LostFound_ViewModel : ViewModel() {
                 }
                 callback(subCategories)
             }
+    }
+
+    fun filterLostFound(filterSelected : String){
+
+        //First checking if the filter selected is any one of the categories
+        LFCategories.value.forEach {category->
+            if (category.name == filterSelected){
+                val filteredLostList = _lostItems.value.filter {
+                    category.name == it.category
+                }
+                val filteredFoundList = _foundItems.value.filter {
+                    category.name == it.category
+                }
+                _filteredLostItems.value = filteredLostList
+                _filteredFoundItems.value = filteredFoundList
+                return
+            }
+        }
+
+        if(filterSelected == "All"){
+            _filteredLostItems.value = _lostItems.value
+            _filteredFoundItems.value =  _foundItems.value
+        }
+        else if(filterSelected == "Others")
+        {
+            val filteredLostList = _lostItems.value.filter {
+                it.category == "Others"
+            }
+            val filteredFoundList = _foundItems.value.filter {
+                it.category == "Others"
+            }
+            _filteredLostItems.value = filteredLostList
+            _filteredFoundItems.value = filteredFoundList
+        }
+        //Then they will be filtered according to the sub category passed
+        else if (filterSelected.isNotEmpty())
+        {
+            val filteredLostList = _lostItems.value.filter {
+                filterSelected == it.subCategory
+            }
+            val filteredFoundList = _foundItems.value.filter {
+                filterSelected == it.subCategory
+            }
+            _filteredLostItems.value = filteredLostList
+            _filteredFoundItems.value = filteredFoundList
+        }//Else if the filterSelected is empty, all items are shown
+        else
+        {
+            _filteredLostItems.value = _lostItems.value
+            _filteredFoundItems.value =  _foundItems.value
+        }
     }
 
 }

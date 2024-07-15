@@ -18,11 +18,12 @@ data class LFCategory(
 )
 
 
-
+/*
 sealed class LFcategories(
     val name: String,
     val subCategories : List<String>
-){
+)
+{
     data object Electronics : LFcategories(name = "Electronics",
         subCategories = listOf("Mobile Phone","Headphones","Earphones","Charger","Wearable Devices","Laptop","Other"))
 
@@ -40,3 +41,5 @@ sealed class LFcategories(
     data object Clothing : LFcategories(name = "Clothing", subCategories = emptyList())
     data object Other : LFcategories(name = "Other", subCategories = emptyList())
 }
+
+ */

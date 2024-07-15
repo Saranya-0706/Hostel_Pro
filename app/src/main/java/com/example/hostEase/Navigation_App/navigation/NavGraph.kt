@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 @Composable
 fun NavGraph(
     searchValue: String,
+    filterSelected : String,
     navController: NavHostController,
     userViewModel: UserViewModel = viewModel()
 ){
@@ -26,7 +27,7 @@ fun NavGraph(
 
         composable(BottomNavItems.General.route){ GeneralScreen(searchValue) }
         composable(BottomNavItems.Complaints.route){ ComplaintScreen(searchValue) }
-        composable(BottomNavItems.LostFound.route){ LostFoundNavGraph() }
+        composable(BottomNavItems.LostFound.route){ LostFoundNavGraph(filterSelected) }
         composable(BottomNavItems.Chat.route){ ChatSwitcher() }
         composable(NavDrawerItems.Profile.route){ ProfileScreen(userViewModel, FirebaseAuth.getInstance().currentUser!!.uid) }
         composable(NavDrawerItems.Settings.route){ Settings() }

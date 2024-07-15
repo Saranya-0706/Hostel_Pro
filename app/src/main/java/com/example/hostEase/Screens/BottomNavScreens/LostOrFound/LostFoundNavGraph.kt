@@ -6,13 +6,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun LostFoundNavGraph(
+fun LostFoundNavGraph(filterSelected : String,
     viewModel: LostFound_ViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "lostfoundScreen") {
 
-        composable("lostfoundScreen") { LostFoundScreen(viewModel,navController)}
+        composable("lostfoundScreen") { LostFoundScreen(filterSelected,viewModel,navController)}
 
         composable("addItem/{type}"){backStackEntry->
             val type = backStackEntry.arguments?.getString("type")

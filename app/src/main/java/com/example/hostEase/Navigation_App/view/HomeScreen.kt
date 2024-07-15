@@ -44,6 +44,10 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
             mutableStateOf("")
         }
 
+        var filterSelected by remember {
+            mutableStateOf("")
+        }
+
         val items = homeViewModel.navDrawerItems
 
         ModalNavigationDrawer(
@@ -65,14 +69,20 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
             Scaffold (
                 topBar = { TopBar(title = "HostEase", drawerState = drawerState, scope = scope,
                     showSearchIcon = shouldShowSearch(currentRoute),
-                    showMenuIcon = shouldShowMenu(currentRoute),
+                    showFilterIcon = shouldShowFilterIcon(currentRoute),
                     searchValueChange = {
                         searchValue = it
+                    },
+                    filterSelected = {
+                        filterSelected = it
                     }
                 ) },
                 bottomBar = {
                     BottomNavBar(navController = navController, onTabSelected = {route->
                         homeViewModel.deactivateSearch()
+                        if(filterSelected.isNotEmpty()) {
+                            filterSelected = "All"
+                        }
                         searchValue = ""
                         currentRoute = route
                     })
@@ -85,7 +95,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
                         .background(Color.White)
                         .padding(padding)
                 ){
-                    NavGraph(searchValue, navController = navController)
+                    NavGraph(searchValue,filterSelected, navController = navController)
                 }
 
             }
@@ -105,6 +115,6 @@ fun shouldShowSearch(route : String?) :  Boolean{
     return route in listOf("home", "complaint", "PrivateComplaints")
 }
 
-fun shouldShowMenu(route : String?) :  Boolean{
+fun shouldShowFilterIcon(route : String?) :  Boolean{
     return route in listOf("lostFound")
 }

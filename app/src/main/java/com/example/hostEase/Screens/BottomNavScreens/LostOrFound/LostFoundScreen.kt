@@ -26,6 +26,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,21 +36,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.skydoves.landscapist.ImageOptions
 
 @Composable
-fun LostFoundScreen(viewModel: LostFound_ViewModel,navController: NavController
+fun LostFoundScreen(filterSelected : String, viewModel: LostFound_ViewModel,navController: NavController
 ) {
     val lostItems by viewModel.lostItems.collectAsStateWithLifecycle()
     val foundItems by viewModel.foundItems.collectAsStateWithLifecycle()
 
+    val filteredLostItems by viewModel.filteredLostItems.collectAsStateWithLifecycle()
+    val filteredFoundItems by viewModel.filteredFoundItems.collectAsState()
+
+    LaunchedEffect(filterSelected) {
+       viewModel.filterLostFound(filterSelected)
+    }
 
     Column(modifier = Modifier
         .fillMaxSize()) {
@@ -58,7 +63,7 @@ fun LostFoundScreen(viewModel: LostFound_ViewModel,navController: NavController
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .padding(10.dp)
+                .padding(10.dp).padding(top = 0.dp)
         ) {
 
             Column(modifier = Modifier
@@ -81,7 +86,10 @@ fun LostFoundScreen(viewModel: LostFound_ViewModel,navController: NavController
                 Box(modifier = Modifier
                     .fillMaxWidth()
                 ){
-                    ItemRow(items = lostItems, viewModel = viewModel, type = "lost", navController = navController)
+                    ItemRow(items =
+                    if(filterSelected.isNotEmpty()|| filteredLostItems.isNotEmpty() || filteredFoundItems.isNotEmpty())
+                        filteredLostItems else lostItems,
+                     viewModel = viewModel, type = "lost", navController = navController)
                 }
 
             }
@@ -108,7 +116,8 @@ fun LostFoundScreen(viewModel: LostFound_ViewModel,navController: NavController
                 }
                 Box(modifier = Modifier.fillMaxWidth()) {
                     ItemRow(
-                        items = foundItems,
+                        items = if(filterSelected.isNotEmpty() || filteredLostItems.isNotEmpty() || filteredFoundItems.isNotEmpty())
+                            filteredFoundItems else foundItems,
                         viewModel = viewModel,
                         type = "found",
                         navController = navController
@@ -119,12 +128,6 @@ fun LostFoundScreen(viewModel: LostFound_ViewModel,navController: NavController
         }
     }
 
-}
-
-@Preview
-@Composable
-fun x(){
-    LostFoundScreen(viewModel = viewModel(), navController = rememberNavController())
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -178,7 +181,7 @@ fun AddItem(viewModel: LostFound_ViewModel, type : String, navController: NavCon
                     })
                 }
                 DropdownMenuItem(text = { Text(text = "Other") }, onClick = {
-                    categorySelected = "Other"
+                    categorySelected = "Others"
                     subCategorySelected = "Other"
                     categoryExpanded = false
                 })
@@ -252,7 +255,7 @@ fun AddItem(viewModel: LostFound_ViewModel, type : String, navController: NavCon
                                 model = model,
                                 itemDetails = itemDetails,
                                 contactDetails = contact,
-                                category = categorySelected,
+                                category = if(categorySelected.isNotEmpty()) categorySelected else "Others",
                                 subCategory = subCategorySelected,
                                 imgUrl = imgUrl
                             )
@@ -267,7 +270,7 @@ fun AddItem(viewModel: LostFound_ViewModel, type : String, navController: NavCon
                             name = name,
                             model = model,
                             itemDetails = itemDetails,
-                            category = categorySelected,
+                            category = if(categorySelected.isNotEmpty()) categorySelected else "Others",
                             subCategory = subCategorySelected,
                             contactDetails = contact)
                         viewModel.addItem(item,type)

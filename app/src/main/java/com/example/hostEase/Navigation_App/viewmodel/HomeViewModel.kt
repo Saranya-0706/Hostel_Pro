@@ -23,11 +23,11 @@ class HomeViewModel : ViewModel() {
     private val _isSearchActive = MutableStateFlow(false)
     val isSearchActive = _isSearchActive.asStateFlow()
 
-    private val _isMenuExpanded = MutableStateFlow(false)
-    val isMenuExpanded = _isMenuExpanded.asStateFlow()
+    private val _isFilterMenuExpanded = MutableStateFlow(false)
+    val isFilterMenuExpanded = _isFilterMenuExpanded.asStateFlow()
 
     fun onMenuClicked(){
-        _isMenuExpanded.value = !_isMenuExpanded.value
+        _isFilterMenuExpanded.value = !_isFilterMenuExpanded.value
     }
     fun updateSearchValue(newValue : String){
         _searchValue.value = newValue
